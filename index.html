@@ -8,20 +8,25 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --ink:#07050E;--surface:#0F0C1D;--panel:#141124;--panel2:#1A1730;
-  --border:rgba(255,255,255,0.06);--borderb:rgba(255,255,255,0.13);
+  --ink:#000000;--surface:#04040D;--panel:#070712;--panel2:#0A0A18;
+  --border:rgba(0,255,255,0.08);--borderb:rgba(0,255,255,0.2);
   --v:#7C3AFF;--v2:#9B5FFF;--vd:rgba(124,58,255,0.15);
-  --c:#00DEFF;--cd:rgba(0,222,255,0.12);
+  --c:#00FFFF;--cd:rgba(0,255,255,0.1);
   --r:#FF2D6B;--rd:rgba(255,45,107,0.15);
   --a:#FFB800;--ad:rgba(255,184,0,0.14);
-  --g:#00E5A0;--gd:rgba(0,229,160,0.13);
-  --text:#EDE9FF;--muted:rgba(237,233,255,0.42);
-  --gv:0 0 36px rgba(124,58,255,0.45);--gc:0 0 36px rgba(0,222,255,0.4);
-  --gr:0 0 36px rgba(255,45,107,0.4);--ga:0 0 36px rgba(255,184,0,0.4);--gg:0 0 36px rgba(0,229,160,0.4);
-  --iris:linear-gradient(135deg,#7C3AFF 0%,#00DEFF 40%,#FF2D6B 70%,#FFB800 100%);
+  --g:#00FF9F;--gd:rgba(0,255,159,0.12);
+  --text:#E0E8FF;--muted:rgba(200,220,255,0.38);
+  --gv:0 0 40px rgba(124,58,255,0.6);--gc:0 0 40px rgba(0,255,255,0.55);
+  --gr:0 0 40px rgba(255,45,107,0.5);--ga:0 0 40px rgba(255,184,0,0.5);--gg:0 0 40px rgba(0,255,159,0.5);
+  --iris:linear-gradient(135deg,#7C3AFF 0%,#00FFFF 40%,#FF2D6B 70%,#FFB800 100%);
+  --hud-border:rgba(0,255,255,0.18);--hud-glow:0 0 20px rgba(0,255,255,0.25);
+  --scan:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,255,255,0.013) 2px,rgba(0,255,255,0.013) 4px);
+  --grid:repeating-linear-gradient(90deg,transparent,transparent 59px,rgba(0,200,255,0.035) 59px,rgba(0,200,255,0.035) 60px),repeating-linear-gradient(0deg,transparent,transparent 59px,rgba(0,200,255,0.035) 59px,rgba(0,200,255,0.035) 60px);
 }
 body{background:var(--ink);color:var(--text);font-family:'Space Grotesk',sans-serif;min-height:100vh;overflow-x:hidden}
-body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");pointer-events:none;z-index:9998;opacity:.7}
+body::before{content:'';position:fixed;inset:0;background-image:var(--grid);pointer-events:none;z-index:9998;opacity:1;transition:opacity .4s}
+body::after{content:'';position:fixed;inset:0;background:var(--scan);pointer-events:none;z-index:9997;opacity:1;transition:opacity .4s}
+body[data-neon="off"]::before,body[data-neon="off"]::after{opacity:0}
 .orb{position:fixed;border-radius:50%;filter:blur(100px);pointer-events:none;z-index:0;opacity:.28}
 .o1{width:600px;height:600px;background:var(--v);top:-250px;left:-200px;animation:d1 14s ease-in-out infinite alternate}
 .o2{width:500px;height:500px;background:var(--r);bottom:-150px;right:-150px;animation:d2 17s ease-in-out infinite alternate}
@@ -29,7 +34,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 @keyframes d1{to{transform:translate(80px,60px)}}@keyframes d2{to{transform:translate(-60px,-80px)}}@keyframes d3{to{transform:translate(-100px,40px)}}
 .iris-line{height:2px;background:var(--iris);box-shadow:0 0 20px rgba(124,58,255,.5)}
 .wrap{position:relative;z-index:1;max-width:1280px;margin:0 auto;padding:0 20px}
-header{position:sticky;top:0;z-index:200;background:rgba(7,5,14,.82);backdrop-filter:blur(24px);border-bottom:1px solid var(--border)}
+header{position:sticky;top:0;z-index:200;background:rgba(0,0,0,.88);backdrop-filter:blur(24px);border-bottom:1px solid var(--hud-border)}
 .hdr{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;max-width:1280px;margin:0 auto}
 .logo{display:flex;align-items:center;gap:10px;text-decoration:none}
 .logo-icon{width:40px;height:40px;background:var(--iris);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:var(--gv);flex-shrink:0}
@@ -65,7 +70,7 @@ header{position:sticky;top:0;z-index:200;background:rgba(7,5,14,.82);backdrop-fi
 .si{font-size:26px;margin-bottom:10px;position:relative;z-index:1}
 .sn{font-family:'Bebas Neue',cursive;font-size:38px;line-height:1;margin-bottom:4px;position:relative;z-index:1}
 .sl{font-size:11px;color:var(--muted);letter-spacing:.5px;position:relative;z-index:1}
-.sc-v .sn{color:var(--v)}.sc-c .sn{color:var(--c)}.sc-r .sn{color:var(--r)}.sc-a .sn{color:var(--a)}.sc-g .sn{color:var(--g)}
+.sc-v .sn{color:var(--v);text-shadow:0 0 20px rgba(124,58,255,.5)}.sc-c .sn{color:var(--c);text-shadow:0 0 20px rgba(0,255,255,.5)}.sc-r .sn{color:var(--r);text-shadow:0 0 20px rgba(255,45,107,.5)}.sc-a .sn{color:var(--a);text-shadow:0 0 20px rgba(255,184,0,.5)}.sc-g .sn{color:var(--g);text-shadow:0 0 20px rgba(0,255,159,.5)}
 .sh{display:flex;align-items:center;gap:10px;margin-bottom:18px}
 .st{font-family:'Bebas Neue',cursive;font-size:24px;letter-spacing:2px}
 .tag{font-family:'DM Mono',monospace;font-size:10px;padding:3px 9px;border-radius:20px;letter-spacing:1.5px}
@@ -114,8 +119,9 @@ select.fi option{background:var(--panel)}
 #loadOv{display:none;position:fixed;inset:0;background:rgba(7,5,14,.88);backdrop-filter:blur(12px);z-index:600;flex-direction:column;align-items:center;justify-content:center;gap:14px}
 .spin{width:44px;height:44px;border:3px solid var(--vd);border-top-color:var(--v);border-radius:50%;animation:sp .75s linear infinite}
 @keyframes sp{to{transform:rotate(360deg)}}
-.phero{background:linear-gradient(135deg,rgba(124,58,255,.12),rgba(0,222,255,.08),rgba(255,45,107,.06));border:1px solid rgba(124,58,255,.2);border-radius:20px;padding:28px;display:flex;gap:22px;align-items:flex-start;margin-bottom:20px;position:relative;overflow:hidden}
+.phero{background:linear-gradient(135deg,rgba(124,58,255,.1),rgba(0,255,255,.06),rgba(255,45,107,.05));border:1px solid var(--hud-border);border-radius:20px;padding:28px;display:flex;gap:22px;align-items:flex-start;margin-bottom:20px;position:relative;overflow:hidden}
 .phero::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--iris)}
+.phero::after{content:'◣ ◢';position:absolute;bottom:8px;right:14px;font-size:10px;color:var(--c);opacity:.35;font-family:'DM Mono',monospace;letter-spacing:4px}
 .pbav{width:84px;height:84px;border-radius:18px;background:var(--iris);display:flex;align-items:center;justify-content:center;font-size:40px;flex-shrink:0;box-shadow:var(--gv);border:2px solid rgba(255,255,255,.12)}
 .qcard{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:18px;text-align:center;transition:all .25s;cursor:pointer}
 .qcard:hover{border-color:var(--v);transform:translateY(-3px);box-shadow:var(--gv)}
@@ -136,12 +142,39 @@ select.fi option{background:var(--panel)}
 .av-opt{font-size:26px;padding:8px;border-radius:10px;cursor:pointer;text-align:center;border:2px solid transparent;transition:all .18s}
 .av-opt:hover{background:var(--vd)}.av-opt.sel{border-color:var(--v);background:var(--vd)}
 .hidden{display:none!important}
+.hud-card{position:relative;background:var(--panel);border:1px solid var(--hud-border);border-radius:14px;padding:22px;transition:all .25s}
+.hud-card::before,.hud-card::after{content:'';position:absolute;width:14px;height:14px;border-color:var(--c);border-style:solid;transition:all .3s}
+.hud-card::before{top:-1px;left:-1px;border-width:2px 0 0 2px}
+.hud-card::after{bottom:-1px;right:-1px;border-width:0 2px 2px 0}
+.hud-card:hover{border-color:var(--c);box-shadow:var(--hud-glow)}
+.neon-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--c);opacity:.7}
+@keyframes blink{0%,100%{opacity:.7}50%{opacity:0}}
+.blink{animation:blink 1s step-end infinite}
+/* NEON OFF MODE */
+body[data-neon="off"] .orb{display:none}
+body[data-neon="off"] .btn-iris{background:transparent;border:1px solid rgba(255,255,255,0.25);color:var(--text);box-shadow:none}
+body[data-neon="off"] .btn-v{background:transparent;border:1px solid var(--v);color:var(--v);box-shadow:none}
+body[data-neon="off"] .btn-r{background:transparent;border:1px solid var(--r);color:var(--r);box-shadow:none}
+body[data-neon="off"] .btn-g{background:transparent;border:1px solid var(--g);color:var(--g);box-shadow:none}
+body[data-neon="off"] .sc:hover,body[data-neon="off"] .card:hover{box-shadow:none}
+body[data-neon="off"] .sc,.hud-card{box-shadow:none}
+body[data-neon="off"] .toast{box-shadow:none}
+body[data-neon="off"] .logo-icon{background:transparent;border:1px solid var(--c);box-shadow:none}
+body[data-neon="off"] .iris-line{background:rgba(255,255,255,.1);box-shadow:none}
+body[data-neon="off"] .phero{background:transparent}
+body[data-neon="off"] .pbav{background:transparent;border-color:var(--muted)}
+body[data-neon="off"] .pfill{box-shadow:none}
+body[data-neon="off"] .tbtn.on{background:transparent;border:1px solid var(--v);color:var(--v);box-shadow:none}
+body[data-neon="off"] .pass-on{background:transparent;color:var(--g)}
+body[data-neon="off"] .pass-off{background:transparent;color:var(--r)}
+body[data-neon="off"] .rk1,.rk2,.rk3{box-shadow:none}
+body[data-neon="off"] .hud-card::before,body[data-neon="off"] .hud-card::after{border-color:rgba(255,255,255,.2)}
 @media(max-width:768px){.sgrid{grid-template-columns:repeat(2,1fr)}.phero{flex-direction:column}.pie-wrap{flex-direction:column}}
 @media(max-width:480px){.sgrid{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 </style>
 </head>
-<body>
+<body data-neon="on">
 
 <div id="loadOv"><div class="spin"></div><p style="font-family:'DM Mono',monospace;font-size:12px;color:var(--muted);letter-spacing:2px">CARREGANDO…</p></div>
 <div class="toast" id="toast"><span id="tIcon" style="font-size:22px"></span><div><div id="tText" style="font-weight:700;font-size:14px"></div><div id="tSub" style="font-size:11px;color:var(--muted);margin-top:2px"></div></div></div>
@@ -156,6 +189,7 @@ select.fi option{background:var(--panel)}
         <div id="hdrAv" class="hdr-av">👤</div>
         <button class="btn btn-ghost btn-sm" onclick="logout()">Sair</button>
       </div>
+      <button id="neonBtn" class="btn btn-ghost btn-sm" onclick="toggleNeon()" title="Alternar modo NEON" style="font-family:'DM Mono',monospace;letter-spacing:1px">◉ NEON</button>
       <button id="loginBtn" class="btn btn-iris" onclick="showM('loginM')">Entrar</button>
     </div>
   </div>
@@ -166,7 +200,7 @@ select.fi option{background:var(--panel)}
 <div class="modal" id="loginM"><div class="mbox">
   <div class="mt" style="background:var(--iris);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">🚀 Acessar Sistema</div>
   <form onsubmit="handleLogin(event)">
-    <div class="fw"><label class="fl">PERFIL</label><select id="uType" class="fi" required><option value="">Selecione</option><option value="student">🎓 Estudante</option><option value="coordinator">👩‍💼 Coordenador</option><option value="director">👑 Diretor</option></select></div>
+    <div class="fw"><label class="fl">PERFIL</label><select id="uType" class="fi" required><option value="">Selecione</option><option value="student">🎓 Estudante</option><option value="professor">📖 Professor</option><option value="coordinator">👩‍💼 Coordenador</option><option value="director">👑 Diretor</option></select></div>
     <div class="fw"><label class="fl">USUÁRIO</label><input type="text" id="uName" class="fi" placeholder="usuario" required></div>
     <div class="fw"><label class="fl">SENHA</label><input type="password" id="uPass" class="fi" placeholder="••••••" required></div>
     <div class="ma"><button type="submit" class="btn btn-iris" style="flex:1">Entrar</button><button type="button" class="btn btn-ghost" style="flex:1" onclick="hideM('loginM')">Cancelar</button></div>
@@ -174,6 +208,7 @@ select.fi option{background:var(--panel)}
   <div style="margin-top:16px;padding:12px;background:rgba(255,255,255,.04);border-radius:10px;border:1px solid var(--border)">
     <p style="font-size:10px;color:var(--muted);margin-bottom:6px;font-family:'DM Mono',monospace;letter-spacing:1px">TESTE</p>
     <p style="font-size:12px">Estudante: <span style="color:var(--c)">joao / 123</span></p>
+    <p style="font-size:12px">Professor: <span style="color:var(--c)">prof.carlos / 123</span></p>
     <p style="font-size:12px">Coord: <span style="color:var(--c)">coord.ana / 123</span></p>
     <p style="font-size:12px">Diretor: <span style="color:var(--c)">diretor / 123</span></p>
   </div>
@@ -241,6 +276,15 @@ select.fi option{background:var(--panel)}
   <div class="ma"><button class="btn btn-iris" style="flex:1" onclick="createCoord()">Criar Acesso</button><button class="btn btn-ghost" style="flex:1" onclick="hideM('addCoordM')">Cancelar</button></div>
 </div></div>
 
+<div class="modal" id="addProfM"><div class="mbox">
+  <div class="mt">📖 Novo Professor</div>
+  <div class="fw"><label class="fl">NOME</label><input type="text" id="pfName" class="fi" placeholder="Ex: Prof. Carlos Silva"></div>
+  <div class="fw"><label class="fl">USUÁRIO</label><input type="text" id="pfUser" class="fi" placeholder="Ex: prof.carlos"></div>
+  <div class="fw"><label class="fl">SENHA</label><input type="password" id="pfPass" class="fi" placeholder="••••••"></div>
+  <div class="fw"><label class="fl">TURMA</label><select id="pfTurma" class="fi"><option value="">Selecione</option></select></div>
+  <div class="ma"><button class="btn btn-iris" style="flex:1" onclick="createProf()">Criar Acesso</button><button class="btn btn-ghost" style="flex:1" onclick="hideM('addProfM')">Cancelar</button></div>
+</div></div>
+
 <div class="modal" id="delM"><div class="mbox">
   <div class="mt" style="color:var(--r)">🗑 Confirmar</div>
   <p id="delLbl" style="text-align:center;color:var(--c);font-weight:700;font-size:16px;margin-bottom:10px"></p>
@@ -254,27 +298,31 @@ select.fi option{background:var(--panel)}
 <!-- WELCOME -->
 <div id="welcomeS" class="wrap" style="padding:60px 20px">
   <div style="text-align:center;margin-bottom:50px">
-    <div style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:4px;color:var(--c);margin-bottom:14px">SISTEMA GAMIFICADO ESCOLAR</div>
+    <div style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:5px;color:var(--c);margin-bottom:10px;opacity:.8">[ SISTEMA GAMIFICADO ESCOLAR ]</div>
+    <div style="display:inline-flex;align-items:center;gap:8px;padding:4px 14px;background:rgba(0,255,255,.06);border:1px solid var(--hud-border);border-radius:20px;margin-bottom:18px">
+      <span style="width:7px;height:7px;background:var(--g);border-radius:50%;display:inline-block;box-shadow:0 0 8px var(--g)" class="blink"></span>
+      <span style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--g)">SISTEMA ONLINE</span>
+    </div>
     <h1 style="font-family:'Bebas Neue',cursive;font-size:clamp(60px,10vw,110px);letter-spacing:6px;line-height:.9;margin-bottom:18px"><span style="background:var(--iris);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">EduGame</span><br>PRVG</h1>
     <p style="font-size:17px;color:var(--muted);max-width:460px;margin:0 auto 32px;line-height:1.6">Responda quizzes semanais, acumule pontos, conquiste o Passe Livre e leve sua sala à vitória.</p>
     <button class="btn btn-iris" style="font-size:15px;padding:14px 36px" onclick="showM('loginM')">Começar Jornada 🚀</button>
   </div>
   <div class="sgrid">
-    <div class="sc sc-r"><div class="si">👥</div><div class="sn" id="wS">—</div><div class="sl">Estudantes</div></div>
-    <div class="sc sc-c"><div class="si">🎟️</div><div class="sn" id="wP">—</div><div class="sl">Passes Ativos</div></div>
-    <div class="sc sc-a"><div class="si">⭐</div><div class="sn" id="wA">—</div><div class="sl">Média de Pontos</div></div>
-    <div class="sc sc-v"><div class="si">🏫</div><div class="sn" id="wT">—</div><div class="sl">Turmas</div></div>
+    <div class="sc sc-r hud-card"><div class="si">👥</div><div class="sn" id="wS">—</div><div class="sl">Estudantes</div></div>
+    <div class="sc sc-c hud-card"><div class="si">🎟️</div><div class="sn" id="wP">—</div><div class="sl">Passes Ativos</div></div>
+    <div class="sc sc-a hud-card"><div class="si">⭐</div><div class="sn" id="wA">—</div><div class="sl">Média de Pontos</div></div>
+    <div class="sc sc-v hud-card"><div class="si">🏫</div><div class="sn" id="wT">—</div><div class="sl">Turmas</div></div>
   </div>
-  <div class="card card-iris" style="margin-bottom:20px">
+  <div class="hud-card" style="margin-bottom:20px">
     <div class="sh"><h3 class="st">🎟️ Com Passe Livre</h3><span class="tag tag-g">ATIVO</span></div>
     <div id="wPassList" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;max-height:280px;overflow-y:auto"></div>
   </div>
-  <div class="card card-iris" style="margin-bottom:20px">
+  <div class="hud-card" style="margin-bottom:20px">
     <div class="sh"><h3 class="st">⚔️ Disputa Sala Especial</h3><span class="tag tag-r">SEMANA</span></div>
     <div class="vs-w"><div class="vs-t"><div class="vs-n" id="vsT1" style="color:var(--v)">—</div><div class="vs-s" id="vsS1">—</div></div><div class="vs-dot">VS</div><div class="vs-t"><div class="vs-n" id="vsT2" style="color:var(--r)">—</div><div class="vs-s" id="vsS2">—</div></div></div>
     <div style="text-align:center"><span style="display:inline-flex;align-items:center;gap:6px;padding:6px 18px;background:var(--ad);border:1px solid rgba(255,184,0,.3);border-radius:20px;color:var(--a);font-family:'DM Mono',monospace;font-size:12px">🕒 Sexta-feira, 15:00h</span></div>
   </div>
-  <div class="card card-iris">
+  <div class="hud-card">
     <div class="sh"><h3 class="st">🏆 Top Estudantes</h3><span class="tag tag-a">RANKING</span></div>
     <div id="wRank"></div>
   </div>
@@ -353,6 +401,31 @@ select.fi option{background:var(--panel)}
   <div class="card"><div class="sh"><h3 class="st">Pontuação das Salas</h3><span class="tag tag-c">SEMANA</span></div><div id="coRooms"></div></div>
 </div>
 
+<!-- PROFESSOR -->
+<div id="profDash" class="hidden wrap" style="padding:28px 20px 60px">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px">
+    <div><h2 style="font-family:'Bebas Neue',cursive;font-size:34px;letter-spacing:2px">📖 Sala do Professor</h2><p style="color:var(--muted);font-size:13px" id="profSubtitle">Acompanhe sua turma</p></div>
+  </div>
+  <div class="sgrid" id="profStats">
+    <div class="sc sc-v"><div class="si">👥</div><div class="sn" id="pfS">—</div><div class="sl">Estudantes</div></div>
+    <div class="sc sc-g"><div class="si">🎟️</div><div class="sn" id="pfP">—</div><div class="sl">Com Passe</div></div>
+    <div class="sc sc-r"><div class="si">⚠️</div><div class="sn" id="pfPen">—</div><div class="sl">Penalidades</div></div>
+    <div class="sc sc-a"><div class="si">⭐</div><div class="sn" id="pfAvg">—</div><div class="sl">Média Pontos</div></div>
+  </div>
+  <div class="card card-iris" style="margin-bottom:18px">
+    <div class="sh"><h3 class="st">🏆 Ranking da Turma</h3><span class="tag tag-a" id="pfTurmaTag">—</span></div>
+    <div id="pfRank"></div>
+  </div>
+  <div class="card card-iris" style="margin-bottom:18px">
+    <div class="sh"><h3 class="st">📚 Participação em Quiz</h3><span class="tag tag-c">SEMANA</span></div>
+    <div id="pfQuiz"></div>
+  </div>
+  <div class="card">
+    <div class="sh"><h3 class="st">📋 Atividade Recente</h3></div>
+    <div id="pfLog"></div>
+  </div>
+</div>
+
 <!-- DIRECTOR -->
 <div id="dirDash" class="hidden wrap" style="padding:28px 20px 60px">
   <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px">
@@ -360,6 +433,7 @@ select.fi option{background:var(--panel)}
     <div style="display:flex;gap:8px;flex-wrap:wrap">
       <button class="btn btn-ghost btn-sm" onclick="showM('addTurmaM')">🏫 Turma</button>
       <button class="btn btn-ghost btn-sm" onclick="openAddStu()">👤 Estudante</button>
+      <button class="btn btn-ghost btn-sm" onclick="openAddProf()">📖 Professor</button>
       <button class="btn btn-ghost btn-sm" onclick="showM('addCoordM')">👩‍💼 Coord.</button>
     </div>
   </div>
@@ -415,6 +489,7 @@ select.fi option{background:var(--panel)}
   <div id="d-gestao" class="hidden">
     <div class="card" style="margin-bottom:18px"><div class="sh"><h3 class="st">🏫 Turmas</h3><span class="tag tag-v">GESTÃO</span></div><div id="gTurmas"></div></div>
     <div class="card" style="margin-bottom:18px"><div class="sh"><h3 class="st">👥 Estudantes</h3><span class="tag tag-c">GESTÃO</span></div><div id="gStudents"></div></div>
+    <div class="card" style="margin-bottom:18px"><div class="sh"><h3 class="st">📖 Professores</h3><span class="tag tag-c">GESTÃO</span></div><div id="gProfs"></div></div>
     <div class="card"><div class="sh"><h3 class="st">👩‍💼 Coordenadores</h3><span class="tag tag-a">GESTÃO</span></div><div id="gCoords"></div></div>
   </div>
 </div>
@@ -453,13 +528,13 @@ const BADGES=[
 const AVTS=['🎮','🌟','🚀','🎯','⚡','🏆','🎸','🦋','🐉','🎨','🧠','🎤','🎲','🏄','🦊','🐺','🦁','🐯','🦅','🌊'];
 
 // ══ DB ════════════════════════════════════════════════════════════════════
-let DB={turmas:[],students:[],coordinators:[],activityLog:[],penaltyLog:[],roomScoreLog:[]};
+let DB={turmas:[],students:[],coordinators:[],professors:[],activityLog:[],penaltyLog:[],roomScoreLog:[]};
 let CU=null;
 
 async function saveDB(){try{await window.storage.set('eg-v4',JSON.stringify(DB),true);}catch(e){console.warn(e)}}
 async function loadDB(){
   setLoad(true);
-  try{const r=await window.storage.get('eg-v4',true);if(r?.value){DB=JSON.parse(r.value);DB.coordinators=DB.coordinators||[];DB.penaltyLog=DB.penaltyLog||[];DB.roomScoreLog=DB.roomScoreLog||[];}else{seed();await saveDB();}}
+  try{const r=await window.storage.get('eg-v4',true);if(r?.value){DB=JSON.parse(r.value);DB.coordinators=DB.coordinators||[];DB.professors=DB.professors||[];DB.penaltyLog=DB.penaltyLog||[];DB.roomScoreLog=DB.roomScoreLog||[];}else{seed();await saveDB();}}
   catch(e){seed();await saveDB();}
   setLoad(false);
 }
@@ -476,6 +551,7 @@ function seed(){
     {id:'s8',name:'Camila Rocha',user:'camila',pass:'123',avatar:'🦋',tid:'t5',pts:23,wp:6,lost:0,wq:{},hadPass:true,pltw:false,prtw:false},
   ];
   DB.coordinators=[{id:'c1',name:'Ana Oliveira',user:'coord.ana',pass:'123',avatar:'👩‍💼'}];
+  DB.professors=[{id:'p1',name:'Carlos Silva',user:'prof.carlos',pass:'123',avatar:'📖',tid:'t1'}];
   DB.activityLog=[
     {icon:'🌟',text:'João Silva +2 pts — Participação',time:'Hoje'},
     {icon:'⚠️',text:'Lucas Henrique -5 pts — Conflito físico',time:'Ontem'},
@@ -502,6 +578,7 @@ const trRank=()=>DB.turmas.map(t=>({...t,tp:DB.students.filter(s=>s.tid===t.id).
 const passHtml=s=>s.pts>=PASS_T?`<span class="pass-b pass-on">🎟️ PASSE ATIVO</span>`:s.pltw?`<span class="pass-b pass-off">❌ PASSE REVOGADO</span>`:`<span class="pass-b pass-no">🔒 SEM PASSE</span>`;
 
 // ══ UI ════════════════════════════════════════════════════════════════════
+function toggleNeon(){const b=document.body;const on=b.dataset.neon==='on';b.dataset.neon=on?'off':'on';const btn=document.getElementById('neonBtn');if(btn)btn.textContent=on?'○ NEON':'◉ NEON';}
 function showM(id){document.getElementById(id).classList.add('show')}
 function hideM(id){document.getElementById(id).classList.remove('show')}
 document.querySelectorAll('.modal').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('show')}));
@@ -533,6 +610,7 @@ function handleLogin(ev){
   const u=document.getElementById('uName').value.trim(),p=document.getElementById('uPass').value,t=document.getElementById('uType').value;
   if(t==='director'&&u==='diretor'&&p==='123'){CU={type:'director',name:'Diretor PRVG',role:'Diretor',avatar:'👑',id:'dir'};}
   else if(t==='coordinator'){const c=DB.coordinators.find(c=>c.user===u&&c.pass===p);if(!c){toast('❌','Credenciais inválidas');return;}CU={type:'coordinator',name:c.name,role:'Coordenador',avatar:c.avatar,id:c.id};}
+  else if(t==='professor'){const pf=DB.professors.find(pf=>pf.user===u&&pf.pass===p);if(!pf){toast('❌','Credenciais inválidas');return;}CU={type:'professor',name:pf.name,role:'Professor',avatar:pf.avatar,id:pf.id,tid:pf.tid};}
   else if(t==='student'){const s=DB.students.find(s=>s.user===u&&s.pass===p);if(!s){toast('❌','Credenciais inválidas');return;}CU={type:'student',name:s.name,role:'Estudante',avatar:s.avatar,id:s.id,sid:s.id};}
   else{toast('❌','Credenciais inválidas');return;}
   hideM('loginM');renderHdr();toast('🎉',`Bem-vindo, ${CU.name}!`,CU.role);showDash();
@@ -546,11 +624,12 @@ function logout(){
   CU=null;document.getElementById('loginBtn').classList.remove('hidden');document.getElementById('hdrUser').classList.add('hidden');
   hideAll();document.getElementById('welcomeS').classList.remove('hidden');renderWelcome();toast('👋','Até logo!');
 }
-function hideAll(){['welcomeS','stuDash','coDash','dirDash'].forEach(id=>document.getElementById(id).classList.add('hidden'))}
+function hideAll(){['welcomeS','stuDash','coDash','profDash','dirDash'].forEach(id=>document.getElementById(id).classList.add('hidden'))}
 function showDash(){
   hideAll();
   if(CU.type==='student'){renderStu();document.getElementById('stuDash').classList.remove('hidden');}
   else if(CU.type==='coordinator'){renderCo();document.getElementById('coDash').classList.remove('hidden');}
+  else if(CU.type==='professor'){renderProf();document.getElementById('profDash').classList.remove('hidden');}
   else if(CU.type==='director'){renderDir();document.getElementById('dirDash').classList.remove('hidden');}
 }
 
@@ -692,6 +771,26 @@ async function confirmRoom(){
   await saveDB();hideM('roomM');toast('🏫',`${t.name}: ${d>=0?'+':''}${d} pts`,`Limpeza:${cl>=0?'+':''}${cl} Org:${og>=0?'+':''}${og}`);renderCo();
 }
 
+// ══ PROFESSOR ═════════════════════════════════════════════════════════════
+function renderProf(){
+  const turma=DB.turmas.find(t=>t.id===CU.tid)||{name:'—',shift:''};
+  document.getElementById('profSubtitle').textContent=`${turma.name} · ${turma.shift}`;
+  document.getElementById('pfTurmaTag').textContent=turma.name;
+  const studs=tStuds(CU.tid);
+  const passes=studs.filter(hp);
+  const pens=DB.penaltyLog.filter(p=>studs.find(s=>s.id===p.sid));
+  const avg=studs.length?(studs.reduce((a,s)=>a+s.pts,0)/studs.length).toFixed(1):'0';
+  document.getElementById('pfS').textContent=studs.length;
+  document.getElementById('pfP').textContent=passes.length;
+  document.getElementById('pfPen').textContent=pens.length;
+  document.getElementById('pfAvg').textContent=avg;
+  const md=['🥇','🥈','🥉'];
+  document.getElementById('pfRank').innerHTML=studs.map((s,i)=>`<div class="rr ${i<3?'rk'+(i+1):''}"><div class="rn">${md[i]||i+1}</div><div class="rav">${s.avatar}</div><div style="flex:1"><div class="rname">${s.name}</div><div class="rsub">${passHtml(s)}</div></div><div class="rpts">${s.pts}pts</div></div>`).join('')||'<p style="color:var(--muted);font-size:13px;padding:10px">Nenhum estudante nesta turma.</p>';
+  document.getElementById('pfQuiz').innerHTML=studs.map(s=>{const done=Object.keys(s.wq||{}).length;return`<div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--panel);border:1px solid var(--border);border-radius:10px;margin-bottom:6px"><div class="rav">${s.avatar}</div><div style="flex:1"><div style="font-weight:700;font-size:13px">${s.name}</div><div class="pbar" style="margin-top:6px;height:6px"><div class="pfill pfill-i" style="width:${done/8*100}%"></div></div></div><div style="font-family:'DM Mono',monospace;font-size:12px;color:var(--muted)">${done}/8</div></div>`}).join('')||'<p style="color:var(--muted);font-size:13px;padding:10px">Nenhum estudante.</p>';
+  const logs=DB.activityLog.filter(l=>studs.some(s=>l.text.includes(s.name))).slice(0,10);
+  document.getElementById('pfLog').innerHTML=logs.map(l=>`<div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--surface);border-radius:10px;border:1px solid var(--border);margin-bottom:6px"><div style="font-size:18px">${l.icon}</div><div style="flex:1;font-size:13px">${l.text}</div><div style="font-size:11px;color:var(--muted);white-space:nowrap">${l.time}</div></div>`).join('')||'<p style="color:var(--muted);font-size:13px;padding:10px">Sem atividade recente.</p>';
+}
+
 // ══ DIRECTOR ══════════════════════════════════════════════════════════════
 function renderDir(){renderDirVisao();popTurma('rTurma',true);}
 
@@ -742,6 +841,7 @@ function renderDirTurmas(){
 function renderDirGestao(){
   document.getElementById('gTurmas').innerHTML=DB.turmas.map(t=>`<div class="rr"><div style="font-size:22px">🏫</div><div style="flex:1"><div class="rname">${t.name} <span class="tag tag-v" style="font-size:10px">${t.shift||''}</span></div><div class="rsub">${DB.students.filter(s=>s.tid===t.id).length} estudantes</div></div><button class="btn btn-sm btn-ghost" style="color:var(--r);border-color:var(--rd)" onclick="doDel('Turma: ${t.name}','Todos os estudantes serão removidos.',async()=>{DB.turmas=DB.turmas.filter(x=>x.id!==\'${t.id}\');DB.students=DB.students.filter(x=>x.tid!==\'${t.id}\');DB.activityLog.unshift({icon:\'🗑\',text:\'Turma removida: ${t.name}\',time:now()});await saveDB();toast(\'🗑\',\'Removido\',\'${t.name}\');renderDir();hideM(\'delM\');})">🗑</button></div>`).join('')||'<p style="color:var(--muted);font-size:13px;padding:10px">Nenhuma turma.</p>';
   document.getElementById('gStudents').innerHTML=rank().map((s,i)=>`<div class="rr"><div class="rn" style="color:var(--muted)">${i+1}</div><div class="rav">${s.avatar}</div><div style="flex:1"><div class="rname">${s.name}</div><div class="rsub">${gt(s.tid).name} · @${s.user}</div></div><div class="rpts" style="margin-right:10px">${s.pts}pts</div><button class="btn btn-sm btn-ghost" style="color:var(--r);border-color:var(--rd)" onclick="doDel('${s.name}','Removido permanentemente.',async()=>{DB.students=DB.students.filter(x=>x.id!==\'${s.id}\');await saveDB();toast(\'🗑\',\'Removido\',\'${s.name}\');renderDir();hideM(\'delM\');})">🗑</button></div>`).join('');
+  document.getElementById('gProfs').innerHTML=DB.professors.map(pf=>`<div class="rr"><div style="font-size:22px">${pf.avatar}</div><div style="flex:1"><div class="rname">${pf.name}</div><div class="rsub">@${pf.user} · ${gt(pf.tid).name}</div></div><button class="btn btn-sm btn-ghost" style="color:var(--r);border-color:var(--rd)" onclick="doDel('${pf.name}','Acesso removido.',async()=>{DB.professors=DB.professors.filter(x=>x.id!==\'${pf.id}\');await saveDB();toast(\'🗑\',\'Removido\',\'${pf.name}\');renderDir();hideM(\'delM\');})">🗑</button></div>`).join('')||'<p style="color:var(--muted);font-size:13px;padding:10px">Nenhum professor.</p>';
   document.getElementById('gCoords').innerHTML=DB.coordinators.map(c=>`<div class="rr"><div style="font-size:22px">${c.avatar}</div><div style="flex:1"><div class="rname">${c.name}</div><div class="rsub">@${c.user}</div></div><button class="btn btn-sm btn-ghost" style="color:var(--r);border-color:var(--rd)" onclick="doDel('${c.name}','Acesso removido.',async()=>{DB.coordinators=DB.coordinators.filter(x=>x.id!==\'${c.id}\');await saveDB();toast(\'🗑\',\'Removido\',\'${c.name}\');renderDir();hideM(\'delM\');})">🗑</button></div>`).join('')||'<p style="color:var(--muted);font-size:13px;padding:10px">Nenhum coordenador.</p>';
 }
 
@@ -766,6 +866,16 @@ async function createStu(){
   DB.students.push({id:uid(),name:n,user:u,pass:p,avatar:av,tid:t,pts:0,wp:0,lost:0,wq:{},hadPass:false,pltw:false,prtw:false});
   DB.activityLog.unshift({icon:'👤',text:`Estudante cadastrado: ${n} (${gt(t).name})`,time:now()});
   await saveDB();hideM('addStuM');toast('👤','Estudante adicionado!',n);renderDir();
+}
+
+function openAddProf(){popTurma('pfTurma',false);document.getElementById('pfName').value='';document.getElementById('pfUser').value='';document.getElementById('pfPass').value='';showM('addProfM');}
+async function createProf(){
+  const n=document.getElementById('pfName').value.trim(),u=document.getElementById('pfUser').value.trim(),p=document.getElementById('pfPass').value,t=document.getElementById('pfTurma').value;
+  if(!n||!u||!p||!t){toast('⚠️','Preencha todos os campos');return;}
+  if(DB.professors.find(pf=>pf.user===u)){toast('⚠️','Usuário já existe');return;}
+  DB.professors.push({id:uid(),name:n,user:u,pass:p,avatar:'📖',tid:t});
+  DB.activityLog.unshift({icon:'📖',text:`Professor cadastrado: ${n} (${gt(t).name})`,time:now()});
+  await saveDB();hideM('addProfM');toast('📖','Professor adicionado!',n);renderDir();
 }
 
 async function createCoord(){
