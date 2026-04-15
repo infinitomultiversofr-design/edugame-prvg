@@ -41,17 +41,20 @@ header{position:sticky;top:0;z-index:200;background:rgba(0,0,0,.88);backdrop-fil
 .logo-txt{font-family:'Bebas Neue',cursive;font-size:24px;letter-spacing:3px;background:var(--iris);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .hdr-r{display:flex;align-items:center;gap:12px}
 .hdr-av{width:38px;height:38px;border-radius:10px;background:var(--iris);display:flex;align-items:center;justify-content:center;font-size:18px;border:2px solid rgba(255,255,255,.1)}
-.btn{display:inline-flex;align-items:center;gap:7px;padding:10px 22px;border-radius:10px;font-weight:700;font-size:13px;cursor:pointer;border:none;transition:all .22s;min-height:42px;font-family:'Space Grotesk',sans-serif}
+.btn{display:inline-flex;align-items:center;gap:7px;padding:10px 22px;border-radius:10px;font-weight:700;font-size:13px;cursor:pointer;border:1.5px solid transparent;transition:all .22s;min-height:42px;font-family:'Space Grotesk',sans-serif;backdrop-filter:blur(8px)}
 .btn:focus-visible{outline:2px solid var(--a);outline-offset:3px}
-.btn-iris{background:var(--iris);color:#fff;box-shadow:var(--gv)}
-.btn-iris:hover{opacity:.88;transform:translateY(-2px)}
-.btn-v{background:var(--v);color:#fff;box-shadow:0 4px 18px rgba(124,58,255,.4)}
-.btn-v:hover{background:var(--v2);transform:translateY(-2px)}
-.btn-ghost{background:rgba(255,255,255,.06);color:var(--text);border:1px solid var(--borderb)}
-.btn-ghost:hover{background:rgba(255,255,255,.1);transform:translateY(-2px)}
-.btn-r{background:var(--r);color:#fff;box-shadow:0 4px 18px rgba(255,45,107,.4)}
-.btn-r:hover{transform:translateY(-2px)}
-.btn-g{background:var(--g);color:#07050E;box-shadow:0 4px 18px rgba(0,229,160,.4)}
+.btn-iris{background:rgba(80,30,180,0.13);border-color:rgba(124,58,255,0.55);color:#C8B4FF;box-shadow:0 0 14px rgba(124,58,255,0.18),inset 0 1px 0 rgba(255,255,255,0.08)}
+.btn-iris:hover{background:rgba(100,50,200,0.22);border-color:rgba(124,58,255,0.9);box-shadow:0 0 28px rgba(124,58,255,0.5),0 0 8px rgba(0,255,255,0.15);transform:translateY(-2px);color:#DDD0FF}
+.btn-v{background:rgba(124,58,255,0.1);border-color:var(--v);color:var(--v);box-shadow:0 0 10px rgba(124,58,255,0.12)}
+.btn-v:hover{background:rgba(124,58,255,0.2);box-shadow:0 0 22px rgba(124,58,255,0.45);transform:translateY(-2px)}
+.btn-ghost{background:rgba(0,255,255,0.03);border-color:var(--hud-border);color:var(--text)}
+.btn-ghost:hover{background:rgba(0,255,255,0.07);border-color:rgba(0,255,255,0.35);transform:translateY(-2px)}
+.btn-r{background:rgba(255,45,107,0.1);border-color:var(--r);color:var(--r);box-shadow:0 0 10px rgba(255,45,107,0.12)}
+.btn-r:hover{background:rgba(255,45,107,0.2);box-shadow:0 0 22px rgba(255,45,107,0.45);transform:translateY(-2px)}
+.btn-g{background:rgba(0,255,159,0.08);border-color:var(--g);color:var(--g);box-shadow:0 0 10px rgba(0,255,159,0.1)}
+.btn-g:hover{background:rgba(0,255,159,0.18);box-shadow:0 0 22px rgba(0,255,159,0.38);transform:translateY(-2px)}
+.btn-a{background:rgba(255,184,0,0.08);border-color:var(--a);color:var(--a);box-shadow:0 0 10px rgba(255,184,0,0.1)}
+.btn-a:hover{background:rgba(255,184,0,0.18);box-shadow:0 0 22px rgba(255,184,0,0.38);transform:translateY(-2px)}
 .btn-sm{padding:7px 14px;font-size:12px;min-height:34px}
 .card{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:22px;transition:border-color .25s}
 .card:hover{border-color:var(--borderb)}
@@ -116,7 +119,7 @@ select.fi option{background:var(--panel)}
 .ma{display:flex;gap:10px;margin-top:20px}
 .toast{position:fixed;top:72px;right:20px;background:var(--panel2);border:1px solid var(--v);border-radius:14px;padding:14px 18px;display:flex;align-items:center;gap:12px;box-shadow:var(--gv);z-index:500;transform:translateX(130%);transition:transform .42s cubic-bezier(.34,1.56,.64,1);max-width:300px}
 .toast.show{transform:translateX(0)}
-#loadOv{display:none;position:fixed;inset:0;background:rgba(7,5,14,.88);backdrop-filter:blur(12px);z-index:600;flex-direction:column;align-items:center;justify-content:center;gap:14px}
+#loadOv{display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);backdrop-filter:blur(12px);z-index:600;flex-direction:column;align-items:center;justify-content:center;gap:14px}
 .spin{width:44px;height:44px;border:3px solid var(--vd);border-top-color:var(--v);border-radius:50%;animation:sp .75s linear infinite}
 @keyframes sp{to{transform:rotate(360deg)}}
 .phero{background:linear-gradient(135deg,rgba(124,58,255,.1),rgba(0,255,255,.06),rgba(255,45,107,.05));border:1px solid var(--hud-border);border-radius:20px;padding:28px;display:flex;gap:22px;align-items:flex-start;margin-bottom:20px;position:relative;overflow:hidden}
@@ -152,12 +155,10 @@ select.fi option{background:var(--panel)}
 .blink{animation:blink 1s step-end infinite}
 /* NEON OFF MODE */
 body[data-neon="off"] .orb{display:none}
-body[data-neon="off"] .btn-iris{background:transparent;border:1px solid rgba(255,255,255,0.25);color:var(--text);box-shadow:none}
-body[data-neon="off"] .btn-v{background:transparent;border:1px solid var(--v);color:var(--v);box-shadow:none}
-body[data-neon="off"] .btn-r{background:transparent;border:1px solid var(--r);color:var(--r);box-shadow:none}
-body[data-neon="off"] .btn-g{background:transparent;border:1px solid var(--g);color:var(--g);box-shadow:none}
+body[data-neon="off"] .btn-iris{background:rgba(0,0,0,0.35);border-color:rgba(255,255,255,0.2);color:var(--muted);box-shadow:none}
+body[data-neon="off"] .btn-v,body[data-neon="off"] .btn-r,body[data-neon="off"] .btn-g,body[data-neon="off"] .btn-a{box-shadow:none}
 body[data-neon="off"] .sc:hover,body[data-neon="off"] .card:hover{box-shadow:none}
-body[data-neon="off"] .sc,.hud-card{box-shadow:none}
+body[data-neon="off"] .sc,body[data-neon="off"] .hud-card{box-shadow:none}
 body[data-neon="off"] .toast{box-shadow:none}
 body[data-neon="off"] .logo-icon{background:transparent;border:1px solid var(--c);box-shadow:none}
 body[data-neon="off"] .iris-line{background:rgba(255,255,255,.1);box-shadow:none}
@@ -167,7 +168,7 @@ body[data-neon="off"] .pfill{box-shadow:none}
 body[data-neon="off"] .tbtn.on{background:transparent;border:1px solid var(--v);color:var(--v);box-shadow:none}
 body[data-neon="off"] .pass-on{background:transparent;color:var(--g)}
 body[data-neon="off"] .pass-off{background:transparent;color:var(--r)}
-body[data-neon="off"] .rk1,.rk2,.rk3{box-shadow:none}
+body[data-neon="off"] .rk1,body[data-neon="off"] .rk2,body[data-neon="off"] .rk3{box-shadow:none}
 body[data-neon="off"] .hud-card::before,body[data-neon="off"] .hud-card::after{border-color:rgba(255,255,255,.2)}
 @media(max-width:768px){.sgrid{grid-template-columns:repeat(2,1fr)}.phero{flex-direction:column}.pie-wrap{flex-direction:column}}
 @media(max-width:480px){.sgrid{grid-template-columns:1fr}}
@@ -281,7 +282,8 @@ body[data-neon="off"] .hud-card::before,body[data-neon="off"] .hud-card::after{b
   <div class="fw"><label class="fl">NOME</label><input type="text" id="pfName" class="fi" placeholder="Ex: Prof. Carlos Silva"></div>
   <div class="fw"><label class="fl">USUÁRIO</label><input type="text" id="pfUser" class="fi" placeholder="Ex: prof.carlos"></div>
   <div class="fw"><label class="fl">SENHA</label><input type="password" id="pfPass" class="fi" placeholder="••••••"></div>
-  <div class="fw"><label class="fl">TURMA</label><select id="pfTurma" class="fi"><option value="">Selecione</option></select></div>
+  <div class="fw"><label class="fl">TURMA PRINCIPAL</label><select id="pfTurma" class="fi"><option value="">Selecione</option></select></div>
+  <div class="fw"><label class="fl">COMPONENTE CURRICULAR</label><input type="text" id="pfComp" class="fi" placeholder="Ex: Matemática, Português, Geral"></div>
   <div class="ma"><button class="btn btn-iris" style="flex:1" onclick="createProf()">Criar Acesso</button><button class="btn btn-ghost" style="flex:1" onclick="hideM('addProfM')">Cancelar</button></div>
 </div></div>
 
@@ -290,6 +292,24 @@ body[data-neon="off"] .hud-card::before,body[data-neon="off"] .hud-card::after{b
   <p id="delLbl" style="text-align:center;color:var(--c);font-weight:700;font-size:16px;margin-bottom:10px"></p>
   <p id="delWrn" style="text-align:center;color:var(--muted);font-size:13px;margin-bottom:18px"></p>
   <div class="ma"><button class="btn btn-r" style="flex:1" id="delBtn">Sim, Remover</button><button class="btn btn-ghost" style="flex:1" onclick="hideM('delM')">Cancelar</button></div>
+</div></div>
+
+<div class="modal" id="stuActionM"><div class="mbox">
+  <div class="mt" id="saName" style="font-size:22px;word-break:break-word">—</div>
+  <div style="text-align:center;margin-bottom:18px;display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap">
+    <span id="saTurma" class="tag tag-v">—</span>
+    <span id="saPassBadge"></span>
+  </div>
+  <div class="sgrid" style="grid-template-columns:1fr 1fr;margin-bottom:16px">
+    <div class="sc sc-a"><div class="si">⭐</div><div class="sn" id="saPts">0</div><div class="sl">Pontos</div></div>
+    <div class="sc sc-r"><div class="si">⚠️</div><div class="sn" id="saPenC">0</div><div class="sl">Penalidades</div></div>
+  </div>
+  <div id="saHist" style="margin-bottom:16px;max-height:200px;overflow-y:auto"></div>
+  <div class="ma" style="flex-wrap:wrap">
+    <button class="btn btn-r" style="flex:1;min-width:120px" onclick="openPenFromAction()">⚠️ Penalidade</button>
+    <button class="btn btn-v" id="saPtsBtn" style="flex:1;min-width:120px;display:none" onclick="openPtsFromAction()">⭐ Pontos</button>
+    <button class="btn btn-ghost" style="min-width:80px" onclick="hideM('stuActionM')">Fechar</button>
+  </div>
 </div></div>
 
 <!-- ═══════ MAIN ═══════ -->
@@ -378,10 +398,8 @@ body[data-neon="off"] .hud-card::before,body[data-neon="off"] .hud-card::after{b
 <!-- COORDINATOR -->
 <div id="coDash" class="hidden wrap" style="padding:28px 20px 60px">
   <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px">
-    <div><h2 style="font-family:'Bebas Neue',cursive;font-size:34px;letter-spacing:2px">Coordenação</h2><p style="color:var(--muted);font-size:13px">Gerencie pontos, penalidades e salas</p></div>
+    <div><h2 style="font-family:'Bebas Neue',cursive;font-size:34px;letter-spacing:2px">Coordenação</h2><p style="color:var(--muted);font-size:13px">Acompanhe turmas e aplique penalidades</p></div>
     <div style="display:flex;gap:8px;flex-wrap:wrap">
-      <button class="btn btn-ghost btn-sm" onclick="prepRoom()">🏫 Pontuar Sala</button>
-      <button class="btn btn-v btn-sm" onclick="openAddPts()">⭐ Pts</button>
       <button class="btn btn-r btn-sm" onclick="openPen()">⚠️ Penalidade</button>
     </div>
   </div>
@@ -398,13 +416,21 @@ body[data-neon="off"] .hud-card::before,body[data-neon="off"] .hud-card::after{b
     </div>
     <div id="coList"></div>
   </div>
+  <div class="card" style="margin-bottom:18px"><div class="sh"><h3 class="st">⚔️ Disputa Sala Especial</h3><span class="tag tag-r">5º-8º ANO</span></div><div id="coComp"></div></div>
   <div class="card"><div class="sh"><h3 class="st">Pontuação das Salas</h3><span class="tag tag-c">SEMANA</span></div><div id="coRooms"></div></div>
 </div>
 
 <!-- PROFESSOR -->
 <div id="profDash" class="hidden wrap" style="padding:28px 20px 60px">
   <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px">
-    <div><h2 style="font-family:'Bebas Neue',cursive;font-size:34px;letter-spacing:2px">📖 Sala do Professor</h2><p style="color:var(--muted);font-size:13px" id="profSubtitle">Acompanhe sua turma</p></div>
+    <div>
+      <h2 style="font-family:'Bebas Neue',cursive;font-size:34px;letter-spacing:2px">📖 Sala do Professor</h2>
+      <p style="color:var(--muted);font-size:13px" id="profSubtitle">Acompanhe sua turma</p>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+      <span id="profComp" class="tag tag-c" style="display:none"></span>
+      <select id="profFilter" class="fi" style="width:auto;min-width:170px" onchange="renderProf()"><option value="">Todas as turmas</option></select>
+    </div>
   </div>
   <div class="sgrid" id="profStats">
     <div class="sc sc-v"><div class="si">👥</div><div class="sn" id="pfS">—</div><div class="sl">Estudantes</div></div>
@@ -413,8 +439,8 @@ body[data-neon="off"] .hud-card::before,body[data-neon="off"] .hud-card::after{b
     <div class="sc sc-a"><div class="si">⭐</div><div class="sn" id="pfAvg">—</div><div class="sl">Média Pontos</div></div>
   </div>
   <div class="card card-iris" style="margin-bottom:18px">
-    <div class="sh"><h3 class="st">🏆 Ranking da Turma</h3><span class="tag tag-a" id="pfTurmaTag">—</span></div>
-    <div id="pfRank"></div>
+    <div class="sh"><h3 class="st">👥 Alunos</h3><span class="tag tag-a" id="pfTurmaTag">—</span></div>
+    <div id="pfList"></div>
   </div>
   <div class="card card-iris" style="margin-bottom:18px">
     <div class="sh"><h3 class="st">📚 Participação em Quiz</h3><span class="tag tag-c">SEMANA</span></div>
@@ -482,7 +508,8 @@ body[data-neon="off"] .hud-card::before,body[data-neon="off"] .hud-card::after{b
   </div>
 
   <div id="d-turmas" class="hidden">
-    <div class="card" style="margin-bottom:18px"><div class="sh"><h3 class="st">Disputa Sala Especial</h3><span class="tag tag-r">TOP 2</span></div><div id="dComp"></div></div>
+    <div class="card" style="margin-bottom:18px"><div class="sh"><h3 class="st">⚔️ Disputa Sala Especial</h3><span class="tag tag-r">5º-8º ANO</span></div><div id="dComp"></div></div>
+    <div class="card" style="margin-bottom:18px"><div class="sh"><h3 class="st">🍿 Sessão de Pipoca</h3><span class="tag tag-a">30+ PTS</span></div><div id="dPipoca"></div></div>
     <div class="card"><div class="sh"><h3 class="st">Ranking de Salas</h3><span class="tag tag-v">COLETIVO</span></div><div id="dRooms"></div></div>
   </div>
 
@@ -534,33 +561,44 @@ let CU=null;
 async function saveDB(){try{await window.storage.set('eg-v4',JSON.stringify(DB),true);}catch(e){console.warn(e)}}
 async function loadDB(){
   setLoad(true);
-  try{const r=await window.storage.get('eg-v4',true);if(r?.value){DB=JSON.parse(r.value);DB.coordinators=DB.coordinators||[];DB.professors=DB.professors||[];DB.penaltyLog=DB.penaltyLog||[];DB.roomScoreLog=DB.roomScoreLog||[];}else{seed();await saveDB();}}
+  try{const r=await window.storage.get('eg-v4',true);if(r?.value){DB=JSON.parse(r.value);DB.coordinators=DB.coordinators||[];DB.professors=DB.professors||[];DB.penaltyLog=DB.penaltyLog||[];DB.roomScoreLog=DB.roomScoreLog||[];DB.turmas.forEach(t=>{if(t.grade===undefined)t.grade=0;if(t.pipocaUsed===undefined)t.pipocaUsed=false;});DB.professors.forEach(pf=>{if(!pf.comp)pf.comp='Geral';});}else{seed();await saveDB();}}
   catch(e){seed();await saveDB();}
   setLoad(false);
 }
 function seed(){
-  DB.turmas=[{id:'t1',name:'9º Ano A',shift:'Manhã',rp:12},{id:'t2',name:'9º Ano B',shift:'Manhã',rp:8},{id:'t3',name:'8º Ano A',shift:'Tarde',rp:14},{id:'t4',name:'8º Ano B',shift:'Tarde',rp:6},{id:'t5',name:'7º Ano A',shift:'Manhã',rp:10},{id:'t6',name:'7º Ano B',shift:'Tarde',rp:4}];
+  DB.turmas=[
+    {id:'t1',name:'1A',shift:'Manhã',rp:0,grade:1,pipocaUsed:false},
+    {id:'t2',name:'2A',shift:'Manhã',rp:0,grade:2,pipocaUsed:false},
+    {id:'t3',name:'3A',shift:'Manhã',rp:0,grade:3,pipocaUsed:false},
+    {id:'t4',name:'3B',shift:'Tarde',rp:0,grade:3,pipocaUsed:false},
+    {id:'t5',name:'4A',shift:'Manhã',rp:0,grade:4,pipocaUsed:false},
+    {id:'t6',name:'4B',shift:'Tarde',rp:0,grade:4,pipocaUsed:false},
+    {id:'t7',name:'5A',shift:'Manhã',rp:8,grade:5,pipocaUsed:false},
+    {id:'t8',name:'6A',shift:'Tarde',rp:12,grade:6,pipocaUsed:false},
+    {id:'t9',name:'7A',shift:'Manhã',rp:21,grade:7,pipocaUsed:false},
+    {id:'t10',name:'8A',shift:'Tarde',rp:31,grade:8,pipocaUsed:false},
+  ];
   DB.students=[
-    {id:'s1',name:'João Silva',user:'joao',pass:'123',avatar:'🎮',tid:'t1',pts:24,wp:6,lost:5,wq:{},hadPass:true,pltw:false,prtw:false},
-    {id:'s2',name:'Maria Fernanda',user:'maria',pass:'123',avatar:'🌟',tid:'t2',pts:28,wp:8,lost:0,wq:{},hadPass:true,pltw:false,prtw:false},
-    {id:'s3',name:'Lucas Henrique',user:'lucas',pass:'123',avatar:'🚀',tid:'t3',pts:18,wp:4,lost:5,wq:{},hadPass:false,pltw:true,prtw:false},
-    {id:'s4',name:'Ana Beatriz',user:'ana',pass:'123',avatar:'🎯',tid:'t1',pts:22,wp:5,lost:0,wq:{},hadPass:true,pltw:false,prtw:false},
-    {id:'s5',name:'Pedro Alves',user:'pedro',pass:'123',avatar:'⚡',tid:'t6',pts:12,wp:2,lost:10,wq:{},hadPass:false,pltw:true,prtw:false},
-    {id:'s6',name:'Juliana Costa',user:'juliana',pass:'123',avatar:'🏆',tid:'t4',pts:30,wp:8,lost:0,wq:{},hadPass:true,pltw:false,prtw:false},
-    {id:'s7',name:'Rafael Moura',user:'rafael',pass:'123',avatar:'🎸',tid:'t2',pts:16,wp:4,lost:5,wq:{},hadPass:false,pltw:false,prtw:true},
-    {id:'s8',name:'Camila Rocha',user:'camila',pass:'123',avatar:'🦋',tid:'t5',pts:23,wp:6,lost:0,wq:{},hadPass:true,pltw:false,prtw:false},
+    {id:'s1',name:'João Silva',user:'joao',pass:'123',avatar:'🎮',tid:'t7',pts:24,wp:6,lost:5,wq:{},hadPass:true,pltw:false,prtw:false},
+    {id:'s2',name:'Maria Fernanda',user:'maria',pass:'123',avatar:'🌟',tid:'t8',pts:28,wp:8,lost:0,wq:{},hadPass:true,pltw:false,prtw:false},
+    {id:'s3',name:'Lucas Henrique',user:'lucas',pass:'123',avatar:'🚀',tid:'t9',pts:18,wp:4,lost:5,wq:{},hadPass:false,pltw:true,prtw:false},
+    {id:'s4',name:'Ana Beatriz',user:'ana',pass:'123',avatar:'🎯',tid:'t7',pts:22,wp:5,lost:0,wq:{},hadPass:true,pltw:false,prtw:false},
+    {id:'s5',name:'Pedro Alves',user:'pedro',pass:'123',avatar:'⚡',tid:'t10',pts:12,wp:2,lost:10,wq:{},hadPass:false,pltw:true,prtw:false},
+    {id:'s6',name:'Juliana Costa',user:'juliana',pass:'123',avatar:'🏆',tid:'t10',pts:30,wp:8,lost:0,wq:{},hadPass:true,pltw:false,prtw:false},
+    {id:'s7',name:'Rafael Moura',user:'rafael',pass:'123',avatar:'🎸',tid:'t8',pts:16,wp:4,lost:5,wq:{},hadPass:false,pltw:false,prtw:true},
+    {id:'s8',name:'Camila Rocha',user:'camila',pass:'123',avatar:'🦋',tid:'t9',pts:23,wp:6,lost:0,wq:{},hadPass:true,pltw:false,prtw:false},
   ];
   DB.coordinators=[{id:'c1',name:'Ana Oliveira',user:'coord.ana',pass:'123',avatar:'👩‍💼'}];
-  DB.professors=[{id:'p1',name:'Carlos Silva',user:'prof.carlos',pass:'123',avatar:'📖',tid:'t1'}];
+  DB.professors=[{id:'p1',name:'Carlos Silva',user:'prof.carlos',pass:'123',avatar:'📖',tid:'t7',comp:'Matemática'}];
   DB.activityLog=[
     {icon:'🌟',text:'João Silva +2 pts — Participação',time:'Hoje'},
     {icon:'⚠️',text:'Lucas Henrique -5 pts — Conflito físico',time:'Ontem'},
     {icon:'🎟️',text:'Rafael Moura reconquistou o Passe Livre',time:'2 dias'},
   ];
   DB.penaltyLog=[
-    {sid:'s3',name:'Lucas Henrique',pts:-5,mot:'🥊 Conflito com violência física',obs:'',date:'Ontem'},
-    {sid:'s5',name:'Pedro Alves',pts:-5,mot:'🗣️ Violência verbal',obs:'',date:'3 dias atrás'},
-    {sid:'s5',name:'Pedro Alves',pts:-5,mot:'😤 Atrapalhou a sala',obs:'',date:'1 semana atrás'},
+    {sid:'s3',name:'Lucas Henrique',pts:-5,mot:'🥊 Conflito com violência física',obs:'',date:'Ontem',by:'Carlos Silva',byRole:'Professor'},
+    {sid:'s5',name:'Pedro Alves',pts:-5,mot:'🗣️ Violência verbal',obs:'',date:'3 dias atrás',by:'Ana Oliveira',byRole:'Coordenador'},
+    {sid:'s5',name:'Pedro Alves',pts:-5,mot:'😤 Atrapalhou a sala de aula',obs:'',date:'1 semana atrás',by:'Diretor PRVG',byRole:'Diretor'},
   ];
   DB.roomScoreLog=[];
 }
@@ -610,7 +648,7 @@ function handleLogin(ev){
   const u=document.getElementById('uName').value.trim(),p=document.getElementById('uPass').value,t=document.getElementById('uType').value;
   if(t==='director'&&u==='diretor'&&p==='123'){CU={type:'director',name:'Diretor PRVG',role:'Diretor',avatar:'👑',id:'dir'};}
   else if(t==='coordinator'){const c=DB.coordinators.find(c=>c.user===u&&c.pass===p);if(!c){toast('❌','Credenciais inválidas');return;}CU={type:'coordinator',name:c.name,role:'Coordenador',avatar:c.avatar,id:c.id};}
-  else if(t==='professor'){const pf=DB.professors.find(pf=>pf.user===u&&pf.pass===p);if(!pf){toast('❌','Credenciais inválidas');return;}CU={type:'professor',name:pf.name,role:'Professor',avatar:pf.avatar,id:pf.id,tid:pf.tid};}
+  else if(t==='professor'){const pf=DB.professors.find(pf=>pf.user===u&&pf.pass===p);if(!pf){toast('❌','Credenciais inválidas');return;}CU={type:'professor',name:pf.name,role:'Professor',avatar:pf.avatar,id:pf.id,tid:pf.tid,comp:pf.comp||''};}
   else if(t==='student'){const s=DB.students.find(s=>s.user===u&&s.pass===p);if(!s){toast('❌','Credenciais inválidas');return;}CU={type:'student',name:s.name,role:'Estudante',avatar:s.avatar,id:s.id,sid:s.id};}
   else{toast('❌','Credenciais inválidas');return;}
   hideM('loginM');renderHdr();toast('🎉',`Bem-vindo, ${CU.name}!`,CU.role);showDash();
@@ -668,7 +706,7 @@ function renderStu(){
   document.getElementById('stPHint').textContent=hp(me)?'✅ Meta atingida!':`Faltam ${PASS_T-me.pts} pts para o passe`;
   // penalties
   const myP=DB.penaltyLog.filter(p=>p.sid===me.id);
-  document.getElementById('stPenLog').innerHTML=myP.length?myP.map(p=>`<div class="pen-row"><div style="font-size:20px">⚠️</div><div style="flex:1;font-size:13px"><strong>${p.mot}</strong>${p.obs?' — '+p.obs:''}</div><div style="font-family:'DM Mono',monospace;font-size:13px;color:var(--r);white-space:nowrap">${p.pts}pts</div><div style="font-size:11px;color:var(--muted);white-space:nowrap;margin-left:8px">${p.date}</div></div>`).join(''):'<p style="color:var(--muted);font-size:13px;padding:10px">Nenhuma penalidade. Continue assim! 🌟</p>';
+  document.getElementById('stPenLog').innerHTML=myP.length?myP.map(p=>`<div class="pen-row"><div style="font-size:20px">⚠️</div><div style="flex:1;font-size:13px"><strong>${p.mot}</strong>${p.obs?' — '+p.obs:''}<div style="font-size:11px;color:var(--muted);margin-top:2px">${p.by?p.by+' ('+p.byRole+') · ':''} ${p.date}</div></div><div style="font-family:'DM Mono',monospace;font-size:13px;color:var(--r);white-space:nowrap">${p.pts}pts</div></div>`).join(''):'<p style="color:var(--muted);font-size:13px;padding:10px">Nenhuma penalidade. Continue assim! 🌟</p>';
   // quiz grid
   document.getElementById('quizGrid').innerHTML=SUBJECTS.map(s=>{const done=me.wq&&me.wq[s.id]===true;const att=me.wq&&me.wq[s.id]!==undefined;return`<div class="qcard ${done?'done':''}" onclick="${att?'':'"openQuiz(\''+s.id+'\')'}">  <div style="font-size:28px;margin-bottom:8px">${s.icon}</div><div style="font-weight:700;font-size:13px;margin-bottom:6px">${s.name}</div><div style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:1px;color:${done?'var(--g)':att?'var(--r)':'var(--muted)'}">${done?'✅ ACERTO':att?'❌ ERRO':'⏳ PENDENTE'}</div></div>`;}).join('');
   // fix the onclick (had a bug above)
@@ -733,8 +771,13 @@ function renderCo(){
   popTurma('coFilter',true);
   const fv=document.getElementById('coFilter')?.value||'';
   const list=(fv?DB.students.filter(s=>s.tid===fv):[...DB.students]).sort((a,b)=>b.pts-a.pts);
-  document.getElementById('coList').innerHTML=list.map((s,i)=>`<div class="rr"><div class="rn" style="color:var(--muted)">${i+1}</div><div class="rav">${s.avatar}</div><div style="flex:1"><div class="rname">${s.name}</div><div class="rsub">${gt(s.tid).name} · ${passHtml(s)}</div></div><div class="rpts" style="margin-right:10px">${s.pts}pts</div><div style="display:flex;gap:6px"><button class="btn btn-sm btn-v" onclick="openAddPts('${s.id}')">+pts</button><button class="btn btn-sm btn-r" onclick="openPen('${s.id}')">⚠️</button></div></div>`).join('');
-  document.getElementById('coRooms').innerHTML=trRank().map((t,i)=>`<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--panel);border:1px solid var(--border);border-radius:10px;margin-bottom:6px"><span style="font-size:18px">${i===0?'🥇':i===1?'🥈':i===2?'🥉':'🏫'}</span><span style="font-weight:700;flex:1;margin-left:10px">${t.name}</span><span style="font-family:'DM Mono',monospace;font-size:13px;color:${(t.rp||0)>=0?'var(--g)':'var(--r)'};margin-right:12px">${(t.rp||0)>=0?'+':''}${t.rp||0} pts</span><button class="btn btn-sm btn-ghost" onclick="prepRoom('${t.id}')">📋 Registrar</button></div>`).join('');
+  document.getElementById('coList').innerHTML=list.map((s,i)=>`<div class="rr" style="cursor:pointer" onclick="openStuAction('${s.id}')"><div class="rn" style="color:var(--muted)">${i+1}</div><div class="rav">${s.avatar}</div><div style="flex:1"><div class="rname">${s.name}</div><div class="rsub">${gt(s.tid).name} · ${passHtml(s)}</div></div><div class="rpts" style="margin-right:10px">${s.pts}pts</div><div style="display:flex;gap:6px" onclick="event.stopPropagation()"><button class="btn btn-sm btn-r" onclick="openPen('${s.id}')">⚠️</button></div></div>`).join('');
+  document.getElementById('coRooms').innerHTML=trRank().map((t,i)=>`<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--panel);border:1px solid var(--border);border-radius:10px;margin-bottom:6px"><span style="font-size:18px">${i===0?'🥇':i===1?'🥈':i===2?'🥉':'🏫'}</span><span style="font-weight:700;flex:1;margin-left:10px">${t.name}</span><span style="font-family:'DM Mono',monospace;font-size:13px;color:${(t.rp||0)>=0?'var(--g)':'var(--r)'};margin-right:12px">${(t.rp||0)>=0?'+':''}${t.rp||0} pts sala</span></div>`).join('');
+  renderCoComp();
+}
+function renderCoComp(){
+  const compT=trRank().filter(t=>(t.grade||0)>=5);
+  document.getElementById('coComp').innerHTML=compT.length>=2?`<div class="vs-w"><div class="vs-t"><div class="vs-n" style="color:var(--v)">${compT[0].name}</div><div class="vs-s">${compT[0].rp||0} pts sala</div></div><div class="vs-dot">VS</div><div class="vs-t"><div class="vs-n" style="color:var(--r)">${compT[1].name}</div><div class="vs-s">${compT[1].rp||0} pts sala</div></div></div><p style="text-align:center;font-size:12px;color:var(--muted);margin-top:8px">5º ao 8º ano — disputa pela Sala Especial</p>`:'<p style="color:var(--muted);font-size:13px;padding:8px">Sem turmas do 5º ao 8º ano ainda.</p>';
 }
 
 let aPtsId=null;
@@ -744,8 +787,9 @@ async function confirmAddPts(){
   const pts=parseInt(document.getElementById('addPtsVal').value)||1;const mot=document.getElementById('addPtsMot').value;
   const prev=hp(s);s.pts+=pts;s.wp=(s.wp||0)+pts;
   if(!prev&&hp(s)){s.prtw=true;s.pltw=false;toast('🎟️',s.name+' reconquistou o Passe!');}
-  DB.activityLog.unshift({icon:'⭐',text:`${s.name} +${pts}pts (${mot})`,time:now()});
-  await saveDB();hideM('addPtsM');toast('⭐',`+${pts} pts para ${s.name}!`,mot);renderCo();
+  DB.activityLog.unshift({icon:'⭐',text:`${s.name} +${pts}pts (${mot}) — ${CU.name}`,time:now()});
+  await saveDB();hideM('addPtsM');toast('⭐',`+${pts} pts para ${s.name}!`,mot);
+  if(CU.type==='director')renderDir();else renderCo();
 }
 
 let aPenId=null;
@@ -753,11 +797,12 @@ function openPen(sid){aPenId=sid||DB.students[0]?.id;const s=DB.students.find(s=
 async function confirmPen(){
   const s=DB.students.find(s=>s.id===aPenId);if(!s)return;
   const mot=document.getElementById('penMot').value;const obs=document.getElementById('penObs').value;
-  const prev=hp(s);s.pts=Math.max(0,s.pts-PEN_PTS);s.lost=(s.lost||0)+PEN_PTS;
-  if(prev&&!hp(s)){s.pltw=true;s.prtw=false;}
-  DB.penaltyLog.unshift({sid:s.id,name:s.name,pts:-PEN_PTS,mot,obs,date:now()});
-  DB.activityLog.unshift({icon:'⚠️',text:`${s.name} -${PEN_PTS}pts (${mot})`,time:now()});
-  await saveDB();hideM('penM');toast('⚠️',`-${PEN_PTS} pts — ${s.name}`,mot);renderCo();
+  s.pts=Math.max(0,s.pts-PEN_PTS);s.lost=(s.lost||0)+PEN_PTS;
+  s.pltw=true;s.prtw=false;
+  DB.penaltyLog.unshift({sid:s.id,name:s.name,pts:-PEN_PTS,mot,obs,date:now(),by:CU.name,byRole:CU.role});
+  DB.activityLog.unshift({icon:'⚠️',text:`${s.name} -${PEN_PTS}pts (${mot}) — ${CU.name}`,time:now()});
+  await saveDB();hideM('penM');toast('⚠️',`-${PEN_PTS} pts — ${s.name}`,mot);
+  if(CU.type==='director')renderDir();else if(CU.type==='coordinator')renderCo();else if(CU.type==='professor')renderProf();
 }
 
 let aRoomId=null;
@@ -773,10 +818,14 @@ async function confirmRoom(){
 
 // ══ PROFESSOR ═════════════════════════════════════════════════════════════
 function renderProf(){
-  const turma=DB.turmas.find(t=>t.id===CU.tid)||{name:'—',shift:''};
-  document.getElementById('profSubtitle').textContent=`${turma.name} · ${turma.shift}`;
-  document.getElementById('pfTurmaTag').textContent=turma.name;
-  const studs=tStuds(CU.tid);
+  const pf=DB.professors.find(p=>p.id===CU.id);
+  const compEl=document.getElementById('profComp');
+  if(pf?.comp&&compEl){compEl.textContent=pf.comp;compEl.style.display='';}
+  popTurma('profFilter',true);
+  const fv=document.getElementById('profFilter')?.value||'';
+  document.getElementById('profSubtitle').textContent=fv?gt(fv).name+' · '+gt(fv).shift:'Todas as turmas';
+  document.getElementById('pfTurmaTag').textContent=fv?gt(fv).name:'Geral';
+  const studs=fv?tStuds(fv):[...DB.students].sort((a,b)=>b.pts-a.pts);
   const passes=studs.filter(hp);
   const pens=DB.penaltyLog.filter(p=>studs.find(s=>s.id===p.sid));
   const avg=studs.length?(studs.reduce((a,s)=>a+s.pts,0)/studs.length).toFixed(1):'0';
@@ -784,12 +833,31 @@ function renderProf(){
   document.getElementById('pfP').textContent=passes.length;
   document.getElementById('pfPen').textContent=pens.length;
   document.getElementById('pfAvg').textContent=avg;
-  const md=['🥇','🥈','🥉'];
-  document.getElementById('pfRank').innerHTML=studs.map((s,i)=>`<div class="rr ${i<3?'rk'+(i+1):''}"><div class="rn">${md[i]||i+1}</div><div class="rav">${s.avatar}</div><div style="flex:1"><div class="rname">${s.name}</div><div class="rsub">${passHtml(s)}</div></div><div class="rpts">${s.pts}pts</div></div>`).join('')||'<p style="color:var(--muted);font-size:13px;padding:10px">Nenhum estudante nesta turma.</p>';
+  document.getElementById('pfList').innerHTML=studs.map((s,i)=>`<div class="rr" style="cursor:pointer" onclick="openStuAction('${s.id}')"><div class="rn" style="color:var(--muted)">${i+1}</div><div class="rav">${s.avatar}</div><div style="flex:1"><div class="rname">${s.name}</div><div class="rsub">${gt(s.tid).name} · ${passHtml(s)}</div></div><div class="rpts">${s.pts}pts</div></div>`).join('')||'<p style="color:var(--muted);font-size:13px;padding:10px">Nenhum estudante.</p>';
   document.getElementById('pfQuiz').innerHTML=studs.map(s=>{const done=Object.keys(s.wq||{}).length;return`<div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--panel);border:1px solid var(--border);border-radius:10px;margin-bottom:6px"><div class="rav">${s.avatar}</div><div style="flex:1"><div style="font-weight:700;font-size:13px">${s.name}</div><div class="pbar" style="margin-top:6px;height:6px"><div class="pfill pfill-i" style="width:${done/8*100}%"></div></div></div><div style="font-family:'DM Mono',monospace;font-size:12px;color:var(--muted)">${done}/8</div></div>`}).join('')||'<p style="color:var(--muted);font-size:13px;padding:10px">Nenhum estudante.</p>';
   const logs=DB.activityLog.filter(l=>studs.some(s=>l.text.includes(s.name))).slice(0,10);
   document.getElementById('pfLog').innerHTML=logs.map(l=>`<div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--surface);border-radius:10px;border:1px solid var(--border);margin-bottom:6px"><div style="font-size:18px">${l.icon}</div><div style="flex:1;font-size:13px">${l.text}</div><div style="font-size:11px;color:var(--muted);white-space:nowrap">${l.time}</div></div>`).join('')||'<p style="color:var(--muted);font-size:13px;padding:10px">Sem atividade recente.</p>';
 }
+
+// ══ STUDENT ACTION MODAL ══════════════════════════════════════════════════
+let sSrchSid=null;
+function openStuAction(sid){
+  sSrchSid=sid;
+  const s=DB.students.find(s=>s.id===sid);if(!s)return;
+  const t=gt(s.tid);
+  const pens=DB.penaltyLog.filter(p=>p.sid===sid);
+  document.getElementById('saName').textContent=s.avatar+' '+s.name;
+  document.getElementById('saTurma').textContent=t.name;
+  document.getElementById('saPassBadge').innerHTML=passHtml(s);
+  document.getElementById('saPts').textContent=s.pts;
+  document.getElementById('saPenC').textContent=pens.length;
+  const ptsBtn=document.getElementById('saPtsBtn');
+  ptsBtn.style.display=CU?.type==='director'?'':'none';
+  document.getElementById('saHist').innerHTML=pens.length?pens.slice(0,3).map(p=>`<div class="pen-row"><div style="font-size:18px">⚠️</div><div style="flex:1;font-size:12px"><div style="font-weight:700">${p.mot}</div><div style="color:var(--muted);font-size:11px">${p.by?p.by+' ('+p.byRole+') · ':''} ${p.date}</div></div><div style="font-family:'DM Mono',monospace;font-size:12px;color:var(--r);white-space:nowrap">${p.pts}pts</div></div>`).join(''):'<p style="color:var(--muted);font-size:12px;padding:8px 0">Sem histórico de penalidades. 🌟</p>';
+  showM('stuActionM');
+}
+function openPenFromAction(){hideM('stuActionM');openPen(sSrchSid);}
+function openPtsFromAction(){hideM('stuActionM');openAddPts(sSrchSid);}
 
 // ══ DIRECTOR ══════════════════════════════════════════════════════════════
 function renderDir(){renderDirVisao();popTurma('rTurma',true);}
@@ -810,7 +878,7 @@ function renderPie(){
   const total=entries.reduce((a,[,v])=>a+v,0);const cols=['#7C3AFF','#FF2D6B','#00DEFF','#FFB800','#00E5A0'];
   let s=0;ctx.clearRect(0,0,180,180);
   entries.forEach(([,count],i)=>{const sl=count/total*Math.PI*2;ctx.beginPath();ctx.moveTo(90,90);ctx.arc(90,90,80,s,s+sl);ctx.closePath();ctx.fillStyle=cols[i%cols.length];ctx.fill();s+=sl;});
-  ctx.beginPath();ctx.arc(90,90,40,0,Math.PI*2);ctx.fillStyle='#141124';ctx.fill();
+  ctx.beginPath();ctx.arc(90,90,40,0,Math.PI*2);ctx.fillStyle='#070712';ctx.fill();
   ctx.fillStyle='white';ctx.font='bold 18px sans-serif';ctx.textAlign='center';ctx.fillText(total,90,94);
   ctx.font='10px monospace';ctx.fillStyle='rgba(255,255,255,.5)';ctx.fillText('TOTAL',90,108);
   document.getElementById('pieLeg').innerHTML=entries.map(([lbl,cnt],i)=>`<div style="display:flex;align-items:flex-start;gap:8px;font-size:13px"><div style="width:10px;height:10px;border-radius:50%;background:${cols[i%cols.length]};flex-shrink:0;margin-top:3px"></div><div><div style="font-weight:600">${lbl.substring(0,28)}</div><div style="font-size:11px;color:var(--muted)">${cnt} caso${cnt>1?'s':''} · ${Math.round(cnt/total*100)}%</div></div></div>`).join('');
@@ -834,14 +902,23 @@ function renderDirPasses(){
 
 function renderDirTurmas(){
   const tr=trRank();const md=['🥇','🥈','🥉'];
-  document.getElementById('dComp').innerHTML=tr.length>=2?`<div class="vs-w"><div class="vs-t"><div class="vs-n" style="color:var(--v)">${tr[0].name}</div><div class="vs-s">${tr[0].tp} pts totais</div></div><div class="vs-dot">VS</div><div class="vs-t"><div class="vs-n" style="color:var(--r)">${tr[1].name}</div><div class="vs-s">${tr[1].tp} pts totais</div></div></div><p style="text-align:center;font-size:12px;color:var(--muted);margin-top:8px">Sala especial para a turma vencedora da semana</p>`:'<p style="color:var(--muted);font-size:13px">Adicione turmas para ver.</p>';
-  document.getElementById('dRooms').innerHTML=tr.map((t,i)=>`<div class="rr ${i<3?'rk'+(i+1):''}"><div class="rn">${md[i]||i+1}</div><div style="font-size:22px">🏫</div><div style="flex:1"><div class="rname">${t.name} <span class="tag tag-v" style="font-size:10px">${t.shift||''}</span></div><div class="rsub">${DB.students.filter(s=>s.tid===t.id).length} estudantes · sala: ${(t.rp||0)>=0?'+':''}${t.rp||0}pts</div></div><div class="rpts">${t.tp}pts</div></div>`).join('');
+  const compT=tr.filter(t=>(t.grade||0)>=5);
+  document.getElementById('dComp').innerHTML=compT.length>=2?`<div class="vs-w"><div class="vs-t"><div class="vs-n" style="color:var(--v)">${compT[0].name}</div><div class="vs-s">${compT[0].rp||0} pts sala</div></div><div class="vs-dot">VS</div><div class="vs-t"><div class="vs-n" style="color:var(--r)">${compT[1].name}</div><div class="vs-s">${compT[1].rp||0} pts sala</div></div></div><p style="text-align:center;font-size:12px;color:var(--muted);margin-top:8px">5º ao 8º ano — Sala Especial da semana</p>`:'<p style="color:var(--muted);font-size:13px;padding:8px">Sem turmas do 5º ao 8º ano cadastradas.</p>';
+  const pipT=DB.turmas.filter(t=>(t.grade||0)>=5&&(t.rp||0)>=30);
+  document.getElementById('dPipoca').innerHTML=pipT.length?pipT.map(t=>`<div style="display:flex;align-items:center;gap:12px;padding:12px 14px;background:var(--panel);border:1px solid ${t.pipocaUsed?'var(--border)':'rgba(255,184,0,.4)'};border-radius:10px;margin-bottom:8px"><div style="font-size:24px">${t.pipocaUsed?'✅':'🍿'}</div><div style="flex:1"><div style="font-weight:700">${t.name}</div><div style="font-size:11px;color:var(--muted)">${t.rp} pts · ${t.pipocaUsed?'Sessão já utilizada':'Elegível para Sessão!'}</div></div>${t.pipocaUsed?'<span class="tag tag-a">USADA</span>':`<button class="btn btn-sm btn-a" onclick="markPipoca('${t.id}')">Marcar Usada</button>`}</div>`).join(''):'<p style="color:var(--muted);font-size:13px;padding:8px">Nenhuma turma com 30+ pts de sala ainda.</p>';
+  document.getElementById('dRooms').innerHTML=tr.map((t,i)=>`<div class="rr ${i<3?'rk'+(i+1):''}"><div class="rn">${md[i]||i+1}</div><div style="font-size:22px">🏫</div><div style="flex:1"><div class="rname">${t.name} <span class="tag tag-v" style="font-size:10px">${t.shift||''}</span>${(t.grade||0)>=5?`<span class="tag tag-c" style="font-size:10px">${t.grade}º ano</span>`:''}</div><div class="rsub">${DB.students.filter(s=>s.tid===t.id).length} estudantes · sala: ${(t.rp||0)>=0?'+':''}${t.rp||0}pts</div></div><div style="display:flex;align-items:center;gap:10px"><div class="rpts">${t.tp}pts</div><button class="btn btn-sm btn-ghost" onclick="prepRoom('${t.id}')">📋 Sala</button></div></div>`).join('');
+}
+async function markPipoca(tid){
+  const t=DB.turmas.find(t=>t.id===tid);if(!t)return;
+  t.pipocaUsed=true;
+  DB.activityLog.unshift({icon:'🍿',text:`${t.name}: Sessão de Pipoca marcada como utilizada`,time:now()});
+  await saveDB();toast('🍿','Pipoca registrada!',t.name);renderDirTurmas();
 }
 
 function renderDirGestao(){
   document.getElementById('gTurmas').innerHTML=DB.turmas.map(t=>`<div class="rr"><div style="font-size:22px">🏫</div><div style="flex:1"><div class="rname">${t.name} <span class="tag tag-v" style="font-size:10px">${t.shift||''}</span></div><div class="rsub">${DB.students.filter(s=>s.tid===t.id).length} estudantes</div></div><button class="btn btn-sm btn-ghost" style="color:var(--r);border-color:var(--rd)" onclick="doDel('Turma: ${t.name}','Todos os estudantes serão removidos.',async()=>{DB.turmas=DB.turmas.filter(x=>x.id!==\'${t.id}\');DB.students=DB.students.filter(x=>x.tid!==\'${t.id}\');DB.activityLog.unshift({icon:\'🗑\',text:\'Turma removida: ${t.name}\',time:now()});await saveDB();toast(\'🗑\',\'Removido\',\'${t.name}\');renderDir();hideM(\'delM\');})">🗑</button></div>`).join('')||'<p style="color:var(--muted);font-size:13px;padding:10px">Nenhuma turma.</p>';
   document.getElementById('gStudents').innerHTML=rank().map((s,i)=>`<div class="rr"><div class="rn" style="color:var(--muted)">${i+1}</div><div class="rav">${s.avatar}</div><div style="flex:1"><div class="rname">${s.name}</div><div class="rsub">${gt(s.tid).name} · @${s.user}</div></div><div class="rpts" style="margin-right:10px">${s.pts}pts</div><button class="btn btn-sm btn-ghost" style="color:var(--r);border-color:var(--rd)" onclick="doDel('${s.name}','Removido permanentemente.',async()=>{DB.students=DB.students.filter(x=>x.id!==\'${s.id}\');await saveDB();toast(\'🗑\',\'Removido\',\'${s.name}\');renderDir();hideM(\'delM\');})">🗑</button></div>`).join('');
-  document.getElementById('gProfs').innerHTML=DB.professors.map(pf=>`<div class="rr"><div style="font-size:22px">${pf.avatar}</div><div style="flex:1"><div class="rname">${pf.name}</div><div class="rsub">@${pf.user} · ${gt(pf.tid).name}</div></div><button class="btn btn-sm btn-ghost" style="color:var(--r);border-color:var(--rd)" onclick="doDel('${pf.name}','Acesso removido.',async()=>{DB.professors=DB.professors.filter(x=>x.id!==\'${pf.id}\');await saveDB();toast(\'🗑\',\'Removido\',\'${pf.name}\');renderDir();hideM(\'delM\');})">🗑</button></div>`).join('')||'<p style="color:var(--muted);font-size:13px;padding:10px">Nenhum professor.</p>';
+  document.getElementById('gProfs').innerHTML=DB.professors.map(pf=>`<div class="rr"><div style="font-size:22px">${pf.avatar}</div><div style="flex:1"><div class="rname">${pf.name} ${pf.comp?`<span class="tag tag-c" style="font-size:10px">${pf.comp}</span>`:''}</div><div class="rsub">@${pf.user} · ${gt(pf.tid).name}</div></div><button class="btn btn-sm btn-ghost" style="color:var(--r);border-color:var(--rd)" onclick="doDel('${pf.name}','Acesso removido.',async()=>{DB.professors=DB.professors.filter(x=>x.id!==\'${pf.id}\');await saveDB();toast(\'🗑\',\'Removido\',\'${pf.name}\');renderDir();hideM(\'delM\');})">🗑</button></div>`).join('')||'<p style="color:var(--muted);font-size:13px;padding:10px">Nenhum professor.</p>';
   document.getElementById('gCoords').innerHTML=DB.coordinators.map(c=>`<div class="rr"><div style="font-size:22px">${c.avatar}</div><div style="flex:1"><div class="rname">${c.name}</div><div class="rsub">@${c.user}</div></div><button class="btn btn-sm btn-ghost" style="color:var(--r);border-color:var(--rd)" onclick="doDel('${c.name}','Acesso removido.',async()=>{DB.coordinators=DB.coordinators.filter(x=>x.id!==\'${c.id}\');await saveDB();toast(\'🗑\',\'Removido\',\'${c.name}\');renderDir();hideM(\'delM\');})">🗑</button></div>`).join('')||'<p style="color:var(--muted);font-size:13px;padding:10px">Nenhum coordenador.</p>';
 }
 
@@ -868,13 +945,13 @@ async function createStu(){
   await saveDB();hideM('addStuM');toast('👤','Estudante adicionado!',n);renderDir();
 }
 
-function openAddProf(){popTurma('pfTurma',false);document.getElementById('pfName').value='';document.getElementById('pfUser').value='';document.getElementById('pfPass').value='';showM('addProfM');}
+function openAddProf(){popTurma('pfTurma',false);document.getElementById('pfName').value='';document.getElementById('pfUser').value='';document.getElementById('pfPass').value='';document.getElementById('pfComp').value='';showM('addProfM');}
 async function createProf(){
-  const n=document.getElementById('pfName').value.trim(),u=document.getElementById('pfUser').value.trim(),p=document.getElementById('pfPass').value,t=document.getElementById('pfTurma').value;
+  const n=document.getElementById('pfName').value.trim(),u=document.getElementById('pfUser').value.trim(),p=document.getElementById('pfPass').value,t=document.getElementById('pfTurma').value,comp=document.getElementById('pfComp').value.trim()||'Geral';
   if(!n||!u||!p||!t){toast('⚠️','Preencha todos os campos');return;}
   if(DB.professors.find(pf=>pf.user===u)){toast('⚠️','Usuário já existe');return;}
-  DB.professors.push({id:uid(),name:n,user:u,pass:p,avatar:'📖',tid:t});
-  DB.activityLog.unshift({icon:'📖',text:`Professor cadastrado: ${n} (${gt(t).name})`,time:now()});
+  DB.professors.push({id:uid(),name:n,user:u,pass:p,avatar:'📖',tid:t,comp});
+  DB.activityLog.unshift({icon:'📖',text:`Professor cadastrado: ${n} · ${comp} (${gt(t).name})`,time:now()});
   await saveDB();hideM('addProfM');toast('📖','Professor adicionado!',n);renderDir();
 }
 
