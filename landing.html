@@ -191,10 +191,8 @@ body[data-neon="off"] .logo-txt{-webkit-text-fill-color:var(--text)}
       <span class="hero-dot"></span>
       SISTEMA GAMIFICADO ESCOLAR
     </div>
-    <h1 class="hero-title">
-      <span class="title-grad">EduGame</span><br>
-      <span class="title-white">PRVG</span>
-    </h1>
+    <!-- PARTICLE CANVAS — replaces static h1 -->
+    <canvas id="particleCanvas" style="display:block;width:100%;height:clamp(200px,26vw,300px);cursor:crosshair;margin-bottom:28px" aria-label="EduGame PRVG"></canvas>
     <p class="hero-sub">Transforme o aprendizado em missão. Quizzes semanais, pontos, Passe Livre e disputa entre turmas — tudo em um sistema que os alunos vão querer usar.</p>
     <div class="hero-btns">
       <a class="btn btn-iris btn-cta" href="index.html">🚀 Entrar na Plataforma</a>
@@ -365,14 +363,14 @@ body[data-neon="off"] .logo-txt{-webkit-text-fill-color:var(--text)}
 </footer>
 
 <script>
+// ══ NEON TOGGLE ══════════════════════════════════════════════════════════
 function toggleNeon(){
-  const b=document.body;
-  const on=b.dataset.neon==='on';
+  const b=document.body;const on=b.dataset.neon==='on';
   b.dataset.neon=on?'off':'on';
   document.getElementById('neonBtn').textContent=on?'○ NEON':'◉ NEON';
 }
 
-// Scroll reveal
+// ══ SCROLL REVEAL ════════════════════════════════════════════════════════
 const obs=new IntersectionObserver(entries=>{
   entries.forEach(e=>{if(e.isIntersecting){e.target.style.opacity='1';e.target.style.transform='translateY(0)';}});
 },{threshold:.12});
@@ -380,6 +378,198 @@ document.querySelectorAll('.hud-card,.stat-block').forEach(el=>{
   el.style.opacity='0';el.style.transform='translateY(28px)';el.style.transition='opacity .55s ease, transform .55s ease';
   obs.observe(el);
 });
+
+// ══ PARTICLE TEXT PHYSICS ════════════════════════════════════════════════
+(function(){
+  const canvas=document.getElementById('particleCanvas');
+  if(!canvas)return;
+  const ctx=canvas.getContext('2d');
+
+  // Iris colour stops (match CSS --iris)
+  const PALETTE=['#7C3AFF','#5A8AFF','#00FFFF','#00FF9F','#FF00FF','#FF2D6B','#FFB800'];
+
+  let W=0,H=0,particles=[],raf=0;
+  let mx=-99999,my=-99999;
+
+  // ── build particles from off-screen text render ─────────────────────
+  function build(){
+    cancelAnimationFrame(raf);
+    W=canvas.offsetWidth||800;
+    H=canvas.offsetHeight||260;
+    canvas.width=W;
+    canvas.height=H;
+
+    const off=document.createElement('canvas');
+    off.width=W;off.height=H;
+    const oc=off.getContext('2d');
+
+    // Two-line text: EduGame / PRVG
+    const fs1=Math.min(W*0.21,148);
+    const fs2=Math.min(W*0.36,145);
+    const y1=H*0.43;
+    const y2=H*0.92;
+
+    oc.clearRect(0,0,W,H);
+    oc.fillStyle='#ffffff';
+    oc.textAlign='center';
+    oc.textBaseline='alphabetic';
+
+    oc.font=`${fs1}px 'Bebas Neue', cursive`;
+    oc.fillText('EduGame',W/2,y1);
+
+    oc.font=`${fs2}px 'Bebas Neue', cursive`;
+    oc.fillText('PRVG',W/2,y2);
+
+    const data=oc.getImageData(0,0,W,H).data;
+    particles=[];
+
+    // Gap between sampled pixels — smaller = more particles (denser text)
+    const gap=W>900?3:W>500?4:5;
+
+    for(let y=0;y<H;y+=gap){
+      for(let x=0;x<W;x+=gap){
+        const i=(y*W+x)*4;
+        if(data[i+3]>90){
+          // colour based on x position across iris gradient
+          const t=x/W;
+          const ci=Math.floor(t*(PALETTE.length-1));
+          const ci2=Math.min(ci+1,PALETTE.length-1);
+          // simple lerp between two stops
+          const col=lerpColor(PALETTE[ci],PALETTE[ci2],t*(PALETTE.length-1)-ci);
+
+          // Random scatter spawn position for entrance animation
+          const angle=Math.random()*Math.PI*2;
+          const dist=Math.random()*Math.max(W,H)*0.6+100;
+          particles.push({
+            x:x+Math.cos(angle)*dist,  // start scattered
+            y:y+Math.sin(angle)*dist,
+            ox:x, oy:y,                // home position
+            vx:0, vy:0,
+            col,
+            sz:gap===3?1.8:gap===4?2:2.4,
+            // staggered entrance: each particle has a random delay before spring kicks in
+            delay:Math.random()*60|0,
+            frame:0,
+          });
+        }
+      }
+    }
+
+    raf=requestAnimationFrame(loop);
+  }
+
+  // ── hex colour lerp helper ───────────────────────────────────────────
+  function hexToRgb(h){
+    const r=parseInt(h.slice(1,3),16),g=parseInt(h.slice(3,5),16),b=parseInt(h.slice(5,7),16);
+    return[r,g,b];
+  }
+  function lerpColor(a,b,t){
+    const[r1,g1,b1]=hexToRgb(a);const[r2,g2,b2]=hexToRgb(b);
+    const r=Math.round(r1+(r2-r1)*t),g=Math.round(g1+(g2-g1)*t),bl=Math.round(b1+(b2-b1)*t);
+    return`rgb(${r},${g},${bl})`;
+  }
+
+  // ── physics constants ────────────────────────────────────────────────
+  const REPEL_R   = 90;   // cursor repulsion radius (px)
+  const REPEL_F   = 7.5;  // repulsion force strength
+  const SPRING_K  = 0.10; // spring constant (pull back to home)
+  const DAMPING   = 0.82; // velocity damping per frame
+  const SPRING_K_ENTER = 0.055; // softer spring during entrance animation
+
+  // ── render loop ─────────────────────────────────────────────────────
+  function loop(){
+    raf=requestAnimationFrame(loop);
+    ctx.clearRect(0,0,W,H);
+
+    // Draw subtle cursor force-field ring
+    if(mx>0&&mx<W&&my>0&&my<H){
+      ctx.beginPath();
+      ctx.arc(mx,my,REPEL_R,0,Math.PI*2);
+      ctx.strokeStyle='rgba(0,255,255,0.07)';
+      ctx.lineWidth=1;
+      ctx.stroke();
+      // Inner dot
+      ctx.beginPath();
+      ctx.arc(mx,my,3,0,Math.PI*2);
+      ctx.fillStyle='rgba(0,255,255,0.25)';
+      ctx.fill();
+    }
+
+    for(let i=0;i<particles.length;i++){
+      const p=particles[i];
+      p.frame++;
+      const entering=p.frame<p.delay;
+
+      if(!entering){
+        // Cursor repulsion
+        const dx=p.x-mx, dy=p.y-my;
+        const d2=dx*dx+dy*dy;
+        if(d2<REPEL_R*REPEL_R){
+          const d=Math.sqrt(d2)||1;
+          const f=(1-d/REPEL_R)*REPEL_F;
+          p.vx+=(dx/d)*f;
+          p.vy+=(dy/d)*f;
+        }
+
+        // Spring force back to origin
+        const k=entering?SPRING_K_ENTER:SPRING_K;
+        p.vx+=(p.ox-p.x)*k;
+        p.vy+=(p.oy-p.y)*k;
+
+        // Velocity damping
+        p.vx*=DAMPING;
+        p.vy*=DAMPING;
+
+        // Integrate position
+        p.x+=p.vx;
+        p.y+=p.vy;
+      } else {
+        // Entrance: fly toward home with soft spring
+        p.vx+=(p.ox-p.x)*SPRING_K_ENTER;
+        p.vy+=(p.oy-p.y)*SPRING_K_ENTER;
+        p.vx*=DAMPING;
+        p.vy*=DAMPING;
+        p.x+=p.vx;
+        p.y+=p.vy;
+      }
+
+      // Brightness boost based on displacement (particles glow when pushed)
+      const disp2=(p.x-p.ox)**2+(p.y-p.oy)**2;
+      const glowT=Math.min(disp2/2500,1); // 0→1 when 50px displaced
+
+      ctx.globalAlpha=0.65+glowT*0.35;
+      ctx.fillStyle=p.col;
+      const sz=p.sz+glowT*1.5;
+      ctx.fillRect(p.x-sz/2,p.y-sz/2,sz,sz);
+    }
+    ctx.globalAlpha=1;
+  }
+
+  // ── events ───────────────────────────────────────────────────────────
+  function onMove(cx,cy){
+    const r=canvas.getBoundingClientRect();
+    mx=(cx-r.left)*(W/r.width);
+    my=(cy-r.top)*(H/r.height);
+  }
+  canvas.addEventListener('mousemove',e=>onMove(e.clientX,e.clientY));
+  canvas.addEventListener('mouseleave',()=>{mx=-99999;my=-99999;});
+  canvas.addEventListener('touchmove',e=>{
+    e.preventDefault();
+    onMove(e.touches[0].clientX,e.touches[0].clientY);
+  },{passive:false});
+  canvas.addEventListener('touchend',()=>{mx=-99999;my=-99999;});
+
+  // ── init after fonts ready ───────────────────────────────────────────
+  document.fonts.ready.then(()=>{
+    build();
+  });
+
+  let resizeT;
+  window.addEventListener('resize',()=>{
+    clearTimeout(resizeT);
+    resizeT=setTimeout(build,220);
+  });
+})();
 </script>
 </body>
 </html>
