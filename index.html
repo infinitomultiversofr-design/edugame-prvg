@@ -8,7 +8,7 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --ink:#000000;--surface:#04040D;--panel:#070712;--panel2:#0A0A18;
+  --ink:#06050F;--surface:#0A0820;--panel:#0D0B22;--panel2:#120F2A;
   --border:rgba(0,255,255,0.08);--borderb:rgba(0,255,255,0.2);
   --v:#7C3AFF;--v2:#9B5FFF;--vd:rgba(124,58,255,0.15);
   --c:#00FFFF;--cd:rgba(0,255,255,0.1);
@@ -23,11 +23,11 @@
   --scan:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,255,255,0.013) 2px,rgba(0,255,255,0.013) 4px);
   --grid:repeating-linear-gradient(90deg,transparent,transparent 59px,rgba(0,200,255,0.035) 59px,rgba(0,200,255,0.035) 60px),repeating-linear-gradient(0deg,transparent,transparent 59px,rgba(0,200,255,0.035) 59px,rgba(0,200,255,0.035) 60px);
 }
-body{background:var(--ink);color:var(--text);font-family:'Space Grotesk',sans-serif;min-height:100vh;overflow-x:hidden}
+body{background:linear-gradient(135deg,#06050F 0%,#0D0622 50%,#06050F 100%);color:var(--text);font-family:'Space Grotesk',sans-serif;min-height:100vh;overflow-x:hidden}
 body::before{content:'';position:fixed;inset:0;background-image:var(--grid);pointer-events:none;z-index:9998;opacity:1;transition:opacity .4s}
 body::after{content:'';position:fixed;inset:0;background:var(--scan);pointer-events:none;z-index:9997;opacity:1;transition:opacity .4s}
 body[data-neon="off"]::before,body[data-neon="off"]::after{opacity:0}
-.orb{position:fixed;border-radius:50%;filter:blur(100px);pointer-events:none;z-index:0;opacity:.28}
+.orb{position:fixed;border-radius:50%;filter:blur(90px);pointer-events:none;z-index:0;opacity:.45}
 .o1{width:600px;height:600px;background:var(--v);top:-250px;left:-200px;animation:d1 14s ease-in-out infinite alternate}
 .o2{width:500px;height:500px;background:var(--r);bottom:-150px;right:-150px;animation:d2 17s ease-in-out infinite alternate}
 .o3{width:350px;height:350px;background:var(--c);top:35%;left:45%;animation:d3 11s ease-in-out infinite alternate}
@@ -56,12 +56,12 @@ header{position:sticky;top:0;z-index:200;background:rgba(0,0,0,.88);backdrop-fil
 .btn-a{background:rgba(255,184,0,0.08);border-color:var(--a);color:var(--a);box-shadow:0 0 10px rgba(255,184,0,0.1)}
 .btn-a:hover{background:rgba(255,184,0,0.18);box-shadow:0 0 22px rgba(255,184,0,0.38);transform:translateY(-2px)}
 .btn-sm{padding:7px 14px;font-size:12px;min-height:34px}
-.card{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:22px;transition:border-color .25s}
+.card{background:rgba(255,255,255,0.035);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.09);border-radius:16px;padding:22px;transition:border-color .25s}
 .card:hover{border-color:var(--borderb)}
 .card-iris{position:relative;overflow:hidden}
 .card-iris::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--iris)}
 .sgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin-bottom:22px}
-.sc{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:20px;text-align:center;position:relative;overflow:hidden;transition:all .25s}
+.sc{background:rgba(255,255,255,0.04);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:20px;text-align:center;position:relative;overflow:hidden;transition:all .25s}
 .sc::after{content:'';position:absolute;inset:0;border-radius:14px;opacity:0;transition:opacity .3s}
 .sc:hover{transform:translateY(-4px)}
 .sc:hover::after{opacity:1}
@@ -91,7 +91,7 @@ header{position:sticky;top:0;z-index:200;background:rgba(0,0,0,.88);backdrop-fil
 .pass-on{background:rgba(0,229,160,.12);border:1px solid rgba(0,229,160,.35);color:var(--g)}
 .pass-off{background:var(--rd);border:1px solid rgba(255,45,107,.35);color:var(--r)}
 .pass-no{background:rgba(255,255,255,.06);border:1px solid var(--borderb);color:var(--muted)}
-.rr{display:flex;align-items:center;gap:14px;padding:13px 16px;border-radius:12px;background:var(--panel);border:1px solid var(--border);margin-bottom:8px;transition:all .22s}
+.rr{display:flex;align-items:center;gap:14px;padding:13px 16px;border-radius:12px;background:rgba(255,255,255,0.03);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.07);margin-bottom:8px;transition:all .22s}
 .rr:hover{border-color:var(--borderb);transform:translateX(4px)}
 .rk1{border-color:var(--a)!important;box-shadow:0 0 18px rgba(255,184,0,.18)}.rk2{border-color:#9ca3af!important}.rk3{border-color:#b87333!important}
 .rn{font-family:'Bebas Neue',cursive;font-size:20px;width:26px;text-align:center;flex-shrink:0}
@@ -99,20 +99,20 @@ header{position:sticky;top:0;z-index:200;background:rgba(0,0,0,.88);backdrop-fil
 .rav{width:40px;height:40px;border-radius:10px;background:var(--iris);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
 .rname{font-weight:700;font-size:14px}.rsub{font-size:11px;color:var(--muted);margin-top:2px}
 .rpts{margin-left:auto;font-family:'DM Mono',monospace;font-size:14px;color:var(--a);white-space:nowrap}
-.tbar{display:flex;gap:4px;background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:5px;margin-bottom:24px;overflow-x:auto}
+.tbar{display:flex;gap:4px;background:rgba(255,255,255,0.04);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:5px;margin-bottom:24px;overflow-x:auto}
 .tbar::-webkit-scrollbar{display:none}
 .tbtn{flex:1;min-width:90px;padding:9px 14px;background:transparent;border:none;border-radius:10px;color:var(--muted);font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;cursor:pointer;transition:all .2s;white-space:nowrap}
 .tbtn.on{background:var(--v);color:#fff;box-shadow:0 4px 14px rgba(124,58,255,.4)}
 .tbtn:hover:not(.on){background:var(--vd);color:var(--text)}
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.78);backdrop-filter:blur(14px);display:flex;align-items:center;justify-content:center;z-index:400;opacity:0;visibility:hidden;transition:all .28s}
 .modal.show{opacity:1;visibility:visible}
-.mbox{background:var(--panel);border:1px solid var(--borderb);border-radius:20px;padding:32px;max-width:480px;width:92%;box-shadow:0 32px 80px rgba(0,0,0,.6);transform:scale(.85) translateY(20px);transition:transform .32s cubic-bezier(.34,1.56,.64,1);max-height:90vh;overflow-y:auto}
+.mbox{background:rgba(6,5,15,0.9);backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:32px;max-width:480px;width:92%;box-shadow:0 32px 80px rgba(0,0,0,.75),0 0 100px rgba(124,58,255,0.08);transform:scale(.85) translateY(20px);transition:transform .32s cubic-bezier(.34,1.56,.64,1);max-height:90vh;overflow-y:auto}
 .mbox::-webkit-scrollbar{width:4px}.mbox::-webkit-scrollbar-thumb{background:var(--v);border-radius:4px}
 .modal.show .mbox{transform:scale(1) translateY(0)}
 .mt{font-family:'Bebas Neue',cursive;font-size:28px;letter-spacing:2px;margin-bottom:22px;text-align:center}
 .fw{margin-bottom:14px}
 .fl{font-size:11px;color:var(--muted);margin-bottom:5px;display:block;letter-spacing:.5px;font-family:'DM Mono',monospace}
-.fi{width:100%;padding:11px 15px;background:var(--ink);border:1px solid var(--borderb);border-radius:10px;color:var(--text);font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:500;transition:all .2s}
+.fi{width:100%;padding:11px 15px;background:rgba(0,0,0,0.5);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid var(--borderb);border-radius:10px;color:var(--text);font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:500;transition:all .2s}
 .fi:focus{outline:none;border-color:var(--v);box-shadow:0 0 0 3px rgba(124,58,255,.2)}
 select.fi{cursor:pointer}
 select.fi option{background:var(--panel)}
@@ -126,10 +126,10 @@ select.fi option{background:var(--panel)}
 .phero::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--iris)}
 .phero::after{content:'◣ ◢';position:absolute;bottom:8px;right:14px;font-size:10px;color:var(--c);opacity:.35;font-family:'DM Mono',monospace;letter-spacing:4px}
 .pbav{width:84px;height:84px;border-radius:18px;background:var(--iris);display:flex;align-items:center;justify-content:center;font-size:40px;flex-shrink:0;box-shadow:var(--gv);border:2px solid rgba(255,255,255,.12)}
-.qcard{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:18px;text-align:center;transition:all .25s;cursor:pointer}
+.qcard{background:rgba(255,255,255,0.03);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.07);border-radius:14px;padding:18px;text-align:center;transition:all .25s;cursor:pointer}
 .qcard:hover{border-color:var(--v);transform:translateY(-3px);box-shadow:var(--gv)}
 .qcard.done{border-color:var(--g);background:rgba(0,229,160,.07);cursor:default}
-.pen-row{display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--panel);border:1px solid rgba(255,45,107,.15);border-radius:10px;margin-bottom:8px}
+.pen-row{display:flex;align-items:center;gap:12px;padding:12px 16px;background:rgba(255,45,107,0.05);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(255,45,107,.18);border-radius:10px;margin-bottom:8px}
 .vs-w{display:flex;align-items:center;justify-content:center;gap:24px;margin:16px 0;flex-wrap:wrap}
 .vs-t{text-align:center}
 .vs-n{font-family:'Bebas Neue',cursive;font-size:28px;letter-spacing:2px}
@@ -145,7 +145,7 @@ select.fi option{background:var(--panel)}
 .av-opt{font-size:26px;padding:8px;border-radius:10px;cursor:pointer;text-align:center;border:2px solid transparent;transition:all .18s}
 .av-opt:hover{background:var(--vd)}.av-opt.sel{border-color:var(--v);background:var(--vd)}
 .hidden{display:none!important}
-.hud-card{position:relative;background:var(--panel);border:1px solid var(--hud-border);border-radius:14px;padding:22px;transition:all .25s}
+.hud-card{position:relative;background:rgba(255,255,255,0.04);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid var(--hud-border);border-radius:14px;padding:22px;transition:all .25s}
 .hud-card::before,.hud-card::after{content:'';position:absolute;width:14px;height:14px;border-color:var(--c);border-style:solid;transition:all .3s}
 .hud-card::before{top:-1px;left:-1px;border-width:2px 0 0 2px}
 .hud-card::after{bottom:-1px;right:-1px;border-width:0 2px 2px 0}
@@ -153,6 +153,20 @@ select.fi option{background:var(--panel)}
 .neon-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--c);opacity:.7}
 @keyframes blink{0%,100%{opacity:.7}50%{opacity:0}}
 .blink{animation:blink 1s step-end infinite}
+/* ── LOGIN SPLIT PANEL ── */
+#loginM .mbox{max-width:880px;width:96%;padding:0;border-radius:20px;overflow:hidden;max-height:96vh}
+.login-split{display:flex;min-height:540px}
+.login-left{flex:1;min-width:0;background:linear-gradient(140deg,rgba(124,58,255,.13),rgba(0,255,255,.06),rgba(0,0,0,.3));border-right:1px solid var(--hud-border);padding:32px 24px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;position:relative;overflow:hidden}
+.login-left::after{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,255,255,.012) 2px,rgba(0,255,255,.012) 4px);pointer-events:none}
+.login-right{width:360px;flex-shrink:0;padding:44px 36px;display:flex;flex-direction:column;justify-content:center;overflow-y:auto}
+.lr-logo{font-family:'Bebas Neue',cursive;font-size:30px;letter-spacing:4px;background:var(--iris);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-align:center;line-height:1}
+.lr-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;width:100%}
+.lr-stat{background:rgba(0,0,0,.4);border:1px solid var(--hud-border);border-radius:10px;padding:12px 6px;text-align:center;position:relative;z-index:1}
+.lr-stat-n{font-family:'Bebas Neue',cursive;font-size:30px;color:var(--c);line-height:1;text-shadow:0 0 18px rgba(0,255,255,.55)}
+.lr-stat-l{font-family:'DM Mono',monospace;font-size:8px;color:var(--muted);letter-spacing:1.5px;margin-top:4px}
+.qlogin-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:12px}
+@keyframes radarSpin{to{transform:rotate(360deg)}}
+@media(max-width:700px){.login-left{display:none}.login-right{width:100%;padding:32px 24px}}
 /* NEON OFF MODE */
 body[data-neon="off"] .orb{display:none}
 body[data-neon="off"] .btn-iris{background:rgba(0,0,0,0.35);border-color:rgba(255,255,255,0.2);color:var(--muted);box-shadow:none}
@@ -198,20 +212,39 @@ body[data-neon="off"] .hud-card::before,body[data-neon="off"] .hud-card::after{b
 </header>
 
 <!-- ═══════ MODALS ═══════ -->
-<div class="modal" id="loginM"><div class="mbox">
-  <div class="mt" style="background:var(--iris);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">🚀 Acessar Sistema</div>
-  <form onsubmit="handleLogin(event)">
-    <div class="fw"><label class="fl">PERFIL</label><select id="uType" class="fi" required><option value="">Selecione</option><option value="student">🎓 Estudante</option><option value="professor">📖 Professor</option><option value="coordinator">👩‍💼 Coordenador</option><option value="director">👑 Diretor</option></select></div>
-    <div class="fw"><label class="fl">USUÁRIO</label><input type="text" id="uName" class="fi" placeholder="usuario" required></div>
-    <div class="fw"><label class="fl">SENHA</label><input type="password" id="uPass" class="fi" placeholder="••••••" required></div>
-    <div class="ma"><button type="submit" class="btn btn-iris" style="flex:1">Entrar</button><button type="button" class="btn btn-ghost" style="flex:1" onclick="hideM('loginM')">Cancelar</button></div>
-  </form>
-  <div style="margin-top:16px;padding:12px;background:rgba(255,255,255,.04);border-radius:10px;border:1px solid var(--border)">
-    <p style="font-size:10px;color:var(--muted);margin-bottom:6px;font-family:'DM Mono',monospace;letter-spacing:1px">TESTE</p>
-    <p style="font-size:12px">Estudante: <span style="color:var(--c)">joao / 123</span></p>
-    <p style="font-size:12px">Professor: <span style="color:var(--c)">prof.carlos / 123</span></p>
-    <p style="font-size:12px">Coord: <span style="color:var(--c)">coord.ana / 123</span></p>
-    <p style="font-size:12px">Diretor: <span style="color:var(--c)">diretor / 123</span></p>
+<div class="modal" id="loginM"><div class="mbox" style="padding:0">
+  <div class="login-split">
+    <div class="login-left">
+      <div style="text-align:center;position:relative;z-index:1;width:100%">
+        <div class="lr-logo">EduGame<br><span style="font-size:22px;letter-spacing:6px;opacity:.7">PRVG</span></div>
+        <p style="color:var(--muted);font-size:10px;letter-spacing:2.5px;margin-top:8px;font-family:'DM Mono',monospace">SISTEMA ESCOLAR GAMIFICADO</p>
+      </div>
+      <canvas id="radarC" width="220" height="220" style="position:relative;z-index:1;opacity:.9"></canvas>
+      <div class="lr-stats" style="position:relative;z-index:1">
+        <div class="lr-stat"><div class="lr-stat-n" id="lrS">—</div><div class="lr-stat-l">ALUNOS</div></div>
+        <div class="lr-stat"><div class="lr-stat-n" id="lrP">—</div><div class="lr-stat-l">PASSES</div></div>
+        <div class="lr-stat"><div class="lr-stat-n" id="lrT">—</div><div class="lr-stat-l">TURMAS</div></div>
+      </div>
+    </div>
+    <div class="login-right">
+      <div style="font-family:'Bebas Neue',cursive;font-size:26px;letter-spacing:3px;margin-bottom:4px;background:var(--iris);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Acesso ao Sistema</div>
+      <p style="color:var(--muted);font-size:11px;margin-bottom:22px;font-family:'DM Mono',monospace;letter-spacing:1px">ENTRE COM SUAS CREDENCIAIS</p>
+      <form onsubmit="handleLogin(event)">
+        <div class="fw"><label class="fl">PERFIL</label><select id="uType" class="fi" required><option value="">Selecione</option><option value="student">🎓 Estudante</option><option value="professor">📖 Professor</option><option value="coordinator">👩‍💼 Coordenador</option><option value="director">👑 Diretor</option></select></div>
+        <div class="fw"><label class="fl">USUÁRIO</label><input type="text" id="uName" class="fi" placeholder="usuario" required></div>
+        <div class="fw"><label class="fl">SENHA</label><input type="password" id="uPass" class="fi" placeholder="••••••" required></div>
+        <div class="ma"><button type="submit" class="btn btn-iris" style="flex:1">Entrar 🚀</button><button type="button" class="btn btn-ghost" onclick="hideM('loginM')">✕</button></div>
+      </form>
+      <div style="margin-top:20px">
+        <p style="font-size:10px;color:var(--muted);margin-bottom:8px;font-family:'DM Mono',monospace;letter-spacing:1px">⚡ ACESSO RÁPIDO DEMO</p>
+        <div class="qlogin-grid">
+          <button class="btn btn-ghost btn-sm" onclick="quickLogin('student','joao','123')">🎓 Estudante</button>
+          <button class="btn btn-ghost btn-sm" onclick="quickLogin('professor','prof.carlos','123')">📖 Professor</button>
+          <button class="btn btn-ghost btn-sm" onclick="quickLogin('coordinator','coord.ana','123')">👩‍💼 Coord.</button>
+          <button class="btn btn-ghost btn-sm" onclick="quickLogin('director','diretor','123')">👑 Diretor</button>
+        </div>
+      </div>
+    </div>
   </div>
 </div></div>
 
@@ -617,8 +650,46 @@ const passHtml=s=>s.pts>=PASS_T?`<span class="pass-b pass-on">🎟️ PASSE ATIV
 
 // ══ UI ════════════════════════════════════════════════════════════════════
 function toggleNeon(){const b=document.body;const on=b.dataset.neon==='on';b.dataset.neon=on?'off':'on';const btn=document.getElementById('neonBtn');if(btn)btn.textContent=on?'○ NEON':'◉ NEON';}
-function showM(id){document.getElementById(id).classList.add('show')}
-function hideM(id){document.getElementById(id).classList.remove('show')}
+function showM(id){
+  document.getElementById(id).classList.add('show');
+  if(id==='loginM'){
+    const passes=DB.students.filter(hp);
+    const lrS=document.getElementById('lrS'),lrP=document.getElementById('lrP'),lrT=document.getElementById('lrT');
+    if(lrS)lrS.textContent=DB.students.length;if(lrP)lrP.textContent=passes.length;if(lrT)lrT.textContent=DB.turmas.length;
+    startRadar();
+  }
+}
+function hideM(id){document.getElementById(id).classList.remove('show');if(id==='loginM')stopRadar();}
+
+// ══ LOGIN UTILS ═══════════════════════════════════════════════════════════
+let radarAnim=null;
+function startRadar(){
+  const cv=document.getElementById('radarC');if(!cv)return;stopRadar();
+  const ctx=cv.getContext('2d');const CX=110,CY=110,R=90;let ang=0;
+  radarAnim=setInterval(()=>{
+    ctx.clearRect(0,0,220,220);
+    [R,R*.65,R*.33].forEach(r=>{ctx.beginPath();ctx.arc(CX,CY,r,0,Math.PI*2);ctx.strokeStyle='rgba(0,255,255,.12)';ctx.lineWidth=1;ctx.stroke();});
+    ctx.strokeStyle='rgba(0,255,255,.07)';ctx.lineWidth=1;
+    [[CX-R,CY,CX+R,CY],[CX,CY-R,CX,CY+R],[CX-R*.72,CY-R*.72,CX+R*.72,CY+R*.72],[CX+R*.72,CY-R*.72,CX-R*.72,CY+R*.72]].forEach(([x1,y1,x2,y2])=>{ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();});
+    ctx.save();ctx.translate(CX,CY);ctx.rotate(ang);
+    const g=ctx.createLinearGradient(0,0,R,0);g.addColorStop(0,'rgba(0,255,255,0)');g.addColorStop(.65,'rgba(0,255,255,.1)');g.addColorStop(1,'rgba(0,255,255,.32)');
+    ctx.beginPath();ctx.moveTo(0,0);ctx.arc(0,0,R,-Math.PI*.45,0);ctx.closePath();ctx.fillStyle=g;ctx.fill();
+    ctx.strokeStyle='rgba(0,255,255,.75)';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(R,0);ctx.stroke();
+    ctx.restore();ang+=0.034;
+    [[CX+32,CY-48],[CX-52,CY+24],[CX+56,CY+40],[CX-18,CY-62],[CX+42,CY+60]].forEach(([bx,by],i)=>{
+      const a=.4+Math.sin(Date.now()/800+i*1.4)*.3;
+      ctx.beginPath();ctx.arc(bx,by,2.5,0,Math.PI*2);ctx.fillStyle=`rgba(0,229,160,${a})`;ctx.fill();
+      ctx.beginPath();ctx.arc(bx,by,5,0,Math.PI*2);ctx.strokeStyle=`rgba(0,229,160,${a*.4})`;ctx.lineWidth=1;ctx.stroke();
+    });
+  },33);
+}
+function stopRadar(){if(radarAnim){clearInterval(radarAnim);radarAnim=null;}}
+function quickLogin(type,user,pass){
+  document.getElementById('uType').value=type;
+  document.getElementById('uName').value=user;
+  document.getElementById('uPass').value=pass;
+  handleLogin({preventDefault:()=>{}});
+}
 document.querySelectorAll('.modal').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('show')}));
 function toast(icon,text,sub=''){
   document.getElementById('tIcon').textContent=icon;
