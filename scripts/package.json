@@ -1,0 +1,11 @@
+{
+  "name": "edugame-m0-gate-tools",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "m0:gate": "node m0-gate.mjs"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.0.0"
+  }
+}

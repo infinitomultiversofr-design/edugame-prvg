@@ -1,117 +1,48 @@
 # CLAUDE.md — EduGame PRVG
 
-## Visão Geral
+Este arquivo governa Claude Code/Claude Desktop quando trabalhar nesta pasta.
 
-Plataforma de gamificação escolar brasileira. **Arquivo único**: `index.html` (HTML + CSS + JS inline). Sem build, sem dependências, sem package manager.
+## Bootstrap obrigatório
+1. Leia `START_HERE.md`.
+2. Leia `docs/00_DOCUMENTATION_INDEX.md`.
+3. Leia `EDUGAME_CODEX_MASTER_SPEC.md` e `ROADMAP_M0_M11.md`.
+4. Identifique o marco/ticket e leia o gate correspondente.
+5. Carregue apenas os documentos/Skills necessários à tarefa.
 
-- Idioma: **pt-BR** — todo texto de UI, variáveis e dados em português
-- Stack: Vanilla HTML5 / CSS3 / JS (ES6+)
-- Persistência: `window.storage.get/set('eg-v4')`
-- Deploy: qualquer host estático, funciona via `file://`
+## Estado do projeto
+- M0-A precisa ser executado e validado em Supabase dev/staging isolado.
+- Não iniciar M1 antes do Gate M0 Final.
+- O pacote contém especificações M0–M11; presença de documentação futura não autoriza implementação antecipada.
 
-## Estrutura
+## MCP Supabase
+- `.mcp.json` é **read-only + project-scoped** por padrão.
+- Defina `SUPABASE_PROJECT_REF` localmente; nunca versionar credenciais.
+- Para escrita em dev/staging, use `.mcp.write.example.json` somente durante ticket autorizado e mantenha aprovação manual.
+- Nunca usar MCP de desenvolvimento contra produção.
 
-```
-edugame-prvg/
-├── index.html    # App completo
-├── landing.html  # Landing page marketing
-└── CLAUDE.md
-```
+## Skills locais
+- `edugame-orchestrating`: ordem, gates, DoD.
+- `edugame-supabase`: migrations/RLS/Auth/MCP.
+- `edugame-security`: LGPD, autorização e menores.
+- `edugame-pwa`: PWA/offline/sync/push/performance.
+- `edugame-testing`: testes e evidências.
+- `edugame-ui`: design system/referências/a11y.
+- `edugame-arena`: Arcade/Arena/realtime.
 
-## Boot Flow
+## Regras inegociáveis
+- não reescrever arquitetura aprovada sem ADR;
+- não avançar de marco sem Gate;
+- não implementar módulos fora do ticket;
+- nunca confiar no cliente para acerto, pontuação, desbloqueio, autorização ou identidade de terceiros;
+- preservar multi-escola, UUID, RLS, auditoria, idempotência e três ledgers independentes;
+- responsável permanece somente leitura dos estudantes vinculados;
+- ranking individual público/disciplinar permanece descartado;
+- sem anúncios, loot boxes, dinheiro real, violência ou chat aberto entre menores;
+- estética original e escura; imagens em `reference-ui/` são referência, não background clicável;
+- build, lint, typecheck e testes relevantes ao terminar.
 
-```
-window.load → boot() → loadDB() → renderWelcome() → [login] → showDash()
-```
+## PWA
+Leia `docs/pwa/00_PWA_MASTER_SPEC.md`. A PWA é offline-capable, não offline-authoritative. Quiz oficial/pontos/recompensas dependem do servidor; cache local nunca amplia acesso.
 
-`loadDB()` lê do storage; se vazio, `seed()` gera dados de teste.
-
-## Roles e Seções DOM
-
-| Role | Tipo (`CU.type`) | Seção DOM |
-|------|-----------------|-----------|
-| Estudante | `student` | `#stuDash` |
-| Professor | `professor` | `#profDash` |
-| Coordenador | `coordinator` | `#coDash` |
-| Diretor | `director` | `#dirDash` |
-
-`CU` = Current User (global). `DB` = Database (global).
-
-## Modelo de Dados
-
-```javascript
-DB = {
-  turmas: [],      // {id, name, shift, rp, grade, pipocaUsed}
-  students: [],    // {id, name, user, pass, avatar, tid, pts, wp, lost, wq, hadPass, pltw, prtw}
-  coordinators:[], // {id, name, user, pass, avatar}
-  professors:[],   // {id, name, user, pass, avatar, tid, comp}
-  activityLog:[],  // {icon, text, time}
-  penaltyLog:[],   // {sid, name, pts, mot, obs, date, by, byRole}
-  roomScoreLog:[]
-}
-```
-
-**Sempre chamar `saveDB()` após qualquer mutação no DB.**
-
-## Constantes Chave
-
-| Constante | Valor | Significado |
-|-----------|-------|-------------|
-| `PASS_T` | `16` | Pontos p/ Passe Livre |
-| `PEN_PTS` | `5` | Pontos descontados por penalidade |
-
-## Regras de Negócio
-
-- **Quiz**: 8 matérias, 1 pt por acerto, só admin lança pontos oficiais
-- **Penalidade**: -5 pts + sempre revoga passe (`pltw=true`), registra `by` e `byRole`
-- **Sala Especial**: turmas `grade >= 5` disputam; sessão de pipoca ao atingir 30 pts
-- **Passe Livre**: `pts >= 16` ativa; penalidade revoga; coordenador pode revogar/restituir
-
-## Abreviações
-
-| Abrev | Significado |
-|-------|-------------|
-| `CU` | Current User |
-| `DB` | Database |
-| `tid` | Turma ID |
-| `pts` | Points |
-| `pltw` | Pass lost this week |
-| `prtw` | Pass regained this week |
-| `rp` | Room points |
-| `comp` | Componente curricular (professor) |
-| `M` suffix | Modal (ex: `penM`, `addPtsM`) |
-
-## CSS
-
-Variáveis de cor: `--v` (violet), `--c` (cyan), `--r` (red), `--a` (amber), `--g` (green), `--iris` (gradient).
-Sempre usar `var(--x)` em vez de hex hardcoded.
-
-Classes: `.sc` (stat card), `.sc-v/.sc-c/.sc-r/.sc-a/.sc-g`, `.rr` (ranking row), `.rk1/.rk2/.rk3`, `.tag`, `.btn`, `.btn-iris/.btn-v/.btn-r/.btn-g/.btn-ghost/.btn-a`.
-
-Modais: `showM(id)` / `hideM(id)`. IDs seguem padrão `<purpose>M`.
-
-## Credenciais de Teste
-
-| Role | Usuário | Senha |
-|------|---------|-------|
-| Estudante | `joao` | `123` |
-| Professor | `prof.carlos` | `123` |
-| Coordenador | `coord.ana` | `123` |
-| Diretor | `diretor` | `123` |
-
-Reset: `window.storage.set('eg-v4', null); location.reload()`
-
-## Diretrizes para IA
-
-1. Ler o arquivo antes de editar — `index.html` tem 1000+ linhas
-2. Manter constraint de arquivo único — tudo em `<style>` e `<script>`
-3. `saveDB()` após toda mutação no DB
-4. Re-renderizar após mudanças de estado (`renderStu()`, `renderDir()`, etc.)
-5. UI sempre em pt-BR
-6. Sem dependências externas (exceto Google Fonts já existente)
-
-## Git
-
-- Branch de desenvolvimento: `claude/add-claude-documentation-Wf9qU`
-- Branch principal: `main`
-- Push: `git push -u origin <branch>`
+## Encerramento de tarefa
+Informe arquivos alterados, testes executados, evidência do gate, riscos remanescentes e qual próximo ticket está liberado. Não declarar “pronto” com mockup ou SQL não aplicado.

@@ -1,0 +1,30 @@
+{
+  "package": "EduGame Complete Desktop Project",
+  "version": "1.1 + M0 Revision 2.1 Hardened",
+  "created_for": [
+    "Claude Desktop",
+    "ChatGPT Desktop",
+    "Codex"
+  ],
+  "blueprint_status": "approved",
+  "m0a_status": "pending_real_supabase_validation",
+  "m0_final_status": "pending",
+  "m1_status": "not_started",
+  "milestones": [
+    "M0",
+    "M1",
+    "M2",
+    "M3",
+    "M4",
+    "M5",
+    "M6",
+    "M7",
+    "M8",
+    "M9",
+    "M10",
+    "M11"
+  ],
+  "reference_ui_included": true,
+  "animal_catalog_count": 200,
+  "canonical_entrypoint": "START_HERE.md"
+}

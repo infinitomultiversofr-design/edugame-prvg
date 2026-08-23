@@ -1,0 +1,12 @@
+{
+  "name": "EduGame M0 Revision 2.1 Hardened",
+  "migrations": 7,
+  "sql_tests": 6,
+  "auth_gate_runner": "scripts/m0-gate.mjs",
+  "status": "ready_for_dev_validation_not_production",
+  "notes": [
+    "Requires Supabase dev/staging to execute full Gate.",
+    "No service-role key may be exposed to client code.",
+    "M0 must pass before M1 Quiz domain."
+  ]
+}

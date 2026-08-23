@@ -1,0 +1,25 @@
+code,title,engine,mode,min_players,max_players
+calc_duel,Duelo de Cálculo,Rapid Choice,both,1,4
+word_race,Corrida das Palavras,Word Assembly,both,1,4
+science_memory,Memória Científica,Memory Match,both,1,4
+patterns_logic,Padrões & Lógica,Pattern Puzzle,both,1,4
+flash_quiz,Quiz Relâmpago,Rapid Choice,both,1,8
+discover_word,Descubra a Palavra,Word Assembly,both,1,4
+secret_code,Código Secreto,Pattern Puzzle,both,1,4
+timeline,Linha do Tempo,Timeline,both,1,4
+mystery_map,Mapa Misterioso,Map Challenge,both,1,4
+classify,Classifica!,Sort & Classify,both,1,4
+sentence_builder,Construtor de Frases,Sentence Builder,both,1,4
+lab_order,Laboratório em Ordem,Process Sequencer,both,1,4
+data_detective,Detetive de Dados,Data Detective,both,1,4
+biome_mission,Missão Biomas,Map Challenge,both,1,4
+vocab_turbo,Vocabulário Turbo,Word Assembly,both,1,4
+connections,Conexões,Collaborative Puzzle,both,1,4
+quick_sequence,Sequência Rápida,Pattern Puzzle,both,1,4
+concept_hunt,Caça-Conceitos,Sort & Classify,both,1,4
+history_route,Rota da História,Timeline,both,1,4
+estimate,Desafio de Estimativa,Rapid Choice,both,1,4
+equation_express,Equação Express,Rapid Choice,both,1,4
+english_motion,Inglês em Movimento,Listening Sprint,both,1,4
+eco_map,EcoMapa,Map Challenge,both,1,4
+coop_challenge,Desafio Cooperativo,Collaborative Puzzle,live,2,4

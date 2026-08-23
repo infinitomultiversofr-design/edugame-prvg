@@ -1,0 +1,17 @@
+{
+  "student_home": true,
+  "quiz": true,
+  "review": true,
+  "video": true,
+  "micro_check": true,
+  "teacher_points": false,
+  "avatar_lab": false,
+  "pet_full": false,
+  "missions": false,
+  "arcade": false,
+  "arena_multiplayer": false,
+  "family_portal": false,
+  "management_portal": false,
+  "network_admin": false,
+  "immersive_webgl": false
+}

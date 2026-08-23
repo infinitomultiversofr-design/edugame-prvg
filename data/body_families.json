@@ -1,0 +1,42 @@
+[
+  {
+    "code": "F01",
+    "name": "Ágil",
+    "purpose": "canídeos, felinos e corpos médios esguios"
+  },
+  {
+    "code": "F02",
+    "name": "Robusto",
+    "purpose": "tronco largo e proporção compacta"
+  },
+  {
+    "code": "F03",
+    "name": "Compacto",
+    "purpose": "pequenos mamíferos e cabeça proporcionalmente maior"
+  },
+  {
+    "code": "F04",
+    "name": "Longilíneo",
+    "purpose": "membros/torso alongados"
+  },
+  {
+    "code": "F05",
+    "name": "Ungulado",
+    "purpose": "pernas longas e cascos"
+  },
+  {
+    "code": "F06",
+    "name": "Ave",
+    "purpose": "asas, bico e garras preservados"
+  },
+  {
+    "code": "F07",
+    "name": "Réptil/Anfíbio",
+    "purpose": "cauda/garras/pés especiais"
+  },
+  {
+    "code": "F08",
+    "name": "Aquático",
+    "purpose": "formas aquáticas e adaptações equivalentes"
+  }
+]

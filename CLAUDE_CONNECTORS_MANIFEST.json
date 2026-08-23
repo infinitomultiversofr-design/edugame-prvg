@@ -1,0 +1,29 @@
+{
+  "version": "1.0",
+  "date": "2026-08-22",
+  "required": [
+    {
+      "name": "Supabase",
+      "mode": "MCP/official connector",
+      "purpose": "database, migrations, logs, docs, edge functions",
+      "default": "project-scoped read-only"
+    }
+  ],
+  "recommended": [
+    {
+      "name": "GitHub",
+      "purpose": "repository, PRs, issues, review"
+    }
+  ],
+  "optional": [
+    {
+      "name": "Google Drive",
+      "purpose": "institutional/source documents only"
+    },
+    {
+      "name": "Canva/design tooling",
+      "purpose": "design production/reference assets"
+    }
+  ],
+  "security": "No connector secret is stored in this repository. Browser OAuth or local credential store only."
+}
