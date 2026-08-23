@@ -1,12 +1,15 @@
 {
-  "name": "EduGame M0 Revision 2.1 Hardened",
-  "migrations": 7,
-  "sql_tests": 6,
+  "name": "EduGame M0 Revision 2.2 Hardened",
+  "migrations": 8,
+  "sql_tests": 10,
   "auth_gate_runner": "scripts/m0-gate.mjs",
   "status": "ready_for_dev_validation_not_production",
   "notes": [
     "Requires Supabase dev/staging to execute full Gate.",
     "No service-role key may be exposed to client code.",
-    "M0 must pass before M1 Quiz domain."
-  ]
+    "M0 must pass before M1 Quiz domain.",
+    "Revision 2.2 fixes authz revocation, helper surface, profile provisioning and audit coverage; see GATE_M0A_EVIDENCE.md."
+  ],
+  "sql_assertions": 140,
+  "local_verifier": "scripts/m0-local-verify.sh"
 }

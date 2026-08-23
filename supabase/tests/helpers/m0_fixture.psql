@@ -1,0 +1,96 @@
+-- =========================================================================
+-- FIXTURE COMPARTILHADA DA SUÍTE M0
+--
+-- Incluída por cada arquivo de teste com  \ir helpers/m0_fixture.psql
+-- (caminho relativo ao arquivo que inclui, não ao diretório de trabalho).
+--
+-- Extensão .psql de propósito: pg_prove/`supabase test db` coletam *.sql,
+-- então este arquivo nunca é executado como teste isolado.
+--
+-- REGRA: esta fixture NÃO desliga triggers nem FKs.
+-- A versão anterior abria com `SET LOCAL session_replication_role = replica`,
+-- o que desativava as FKs compostas de escopo e os triggers de vínculo —
+-- exatamente as garantias que o Gate M0-A manda provar. Além disso esse
+-- parâmetro exige superusuário, e o papel `postgres` do Supabase hospedado
+-- não é superusuário, então a suíte só rodava em stack local.
+-- Aqui os usuários são criados de verdade em auth.users e todas as
+-- constraints permanecem armadas.
+--
+-- PRINCIPAIS
+--   escola A          10000000-…-0001      escola B          20000000-…-0001
+--   ano letivo A      10000000-…-0002      ano letivo B      20000000-…-0002
+--   turma 6A          10000000-…-0003      turma B 6A        20000000-…-0003
+--   turma 7A          10000000-…-0004
+--   aluno A1          10000000-…-0011      aluno B1          20000000-…-0011
+--   aluno A2          10000000-…-0012
+--   user aluno A1     aaaaaaaa-…-aa01      user prof B       bbbbbbbb-…-bb10
+--   user aluno A2     aaaaaaaa-…-aa02      user sem vínculo  bbbbbbbb-…-bb99
+--   user prof A       aaaaaaaa-…-aa10
+--   user responsável  aaaaaaaa-…-aa20
+--   user coord A      aaaaaaaa-…-aa30
+--   flag arena_beta   ffffffff-…-0001  (default_enabled = false)
+-- =========================================================================
+
+CREATE FUNCTION pg_temp.act_as(p_user uuid)
+RETURNS void
+LANGUAGE plpgsql
+AS $fixture$
+BEGIN
+  PERFORM set_config(
+    'request.jwt.claims',
+    json_build_object('sub', p_user, 'role', 'authenticated')::text,
+    true
+  );
+  PERFORM set_config('request.jwt.claim.sub', p_user::text, true);
+END;
+$fixture$;
+
+INSERT INTO auth.users (id, email) VALUES
+  ('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaa01', 'm0-aluno-a1@edugame.test'),
+  ('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaa02', 'm0-aluno-a2@edugame.test'),
+  ('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaa10', 'm0-professor-a@edugame.test'),
+  ('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaa20', 'm0-responsavel-a@edugame.test'),
+  ('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaa30', 'm0-coordenacao-a@edugame.test'),
+  ('bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbb10', 'm0-professor-b@edugame.test'),
+  ('bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbb99', 'm0-sem-vinculo@edugame.test');
+
+INSERT INTO public.schools (id, name, short_name, slug) VALUES
+  ('10000000-0000-0000-0000-000000000001', 'M0 Escola A', 'M0-A', 'm0-test-a'),
+  ('20000000-0000-0000-0000-000000000001', 'M0 Escola B', 'M0-B', 'm0-test-b');
+
+INSERT INTO public.academic_years (id, school_id, year, start_date, end_date) VALUES
+  ('10000000-0000-0000-0000-000000000002', '10000000-0000-0000-0000-000000000001', 2026, '2026-02-01', '2026-12-15'),
+  ('20000000-0000-0000-0000-000000000002', '20000000-0000-0000-0000-000000000001', 2026, '2026-02-01', '2026-12-15');
+
+INSERT INTO public.classes (id, school_id, academic_year_id, name, grade, code) VALUES
+  ('10000000-0000-0000-0000-000000000003', '10000000-0000-0000-0000-000000000001', '10000000-0000-0000-0000-000000000002', '6º A', '6º ano', '6A'),
+  ('10000000-0000-0000-0000-000000000004', '10000000-0000-0000-0000-000000000001', '10000000-0000-0000-0000-000000000002', '7º A', '7º ano', '7A'),
+  ('20000000-0000-0000-0000-000000000003', '20000000-0000-0000-0000-000000000001', '20000000-0000-0000-0000-000000000002', '6º A', '6º ano', '6A');
+
+INSERT INTO public.school_memberships (user_id, school_id, role, status) VALUES
+  ('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaa01', '10000000-0000-0000-0000-000000000001', 'student',     'active'),
+  ('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaa02', '10000000-0000-0000-0000-000000000001', 'student',     'active'),
+  ('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaa10', '10000000-0000-0000-0000-000000000001', 'teacher',     'active'),
+  ('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaa20', '10000000-0000-0000-0000-000000000001', 'family',      'active'),
+  ('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaa30', '10000000-0000-0000-0000-000000000001', 'coordinator', 'active'),
+  ('bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbb10', '20000000-0000-0000-0000-000000000001', 'teacher',     'active');
+
+INSERT INTO public.students (id, edugame_id, user_id, school_id, official_name, display_name) VALUES
+  ('10000000-0000-0000-0000-000000000011', 'M0-A-001', 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaa01', '10000000-0000-0000-0000-000000000001', 'Aluno A1', 'Aluno A1'),
+  ('10000000-0000-0000-0000-000000000012', 'M0-A-002', 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaa02', '10000000-0000-0000-0000-000000000001', 'Aluno A2', 'Aluno A2'),
+  ('20000000-0000-0000-0000-000000000011', 'M0-B-001', NULL,                                   '20000000-0000-0000-0000-000000000001', 'Aluno B1', 'Aluno B1');
+
+INSERT INTO public.enrollments (student_id, school_id, academic_year_id, class_id, status) VALUES
+  ('10000000-0000-0000-0000-000000000011', '10000000-0000-0000-0000-000000000001', '10000000-0000-0000-0000-000000000002', '10000000-0000-0000-0000-000000000003', 'active'),
+  ('10000000-0000-0000-0000-000000000012', '10000000-0000-0000-0000-000000000001', '10000000-0000-0000-0000-000000000002', '10000000-0000-0000-0000-000000000003', 'active'),
+  ('20000000-0000-0000-0000-000000000011', '20000000-0000-0000-0000-000000000001', '20000000-0000-0000-0000-000000000002', '20000000-0000-0000-0000-000000000003', 'active');
+
+INSERT INTO public.teacher_assignments (user_id, school_id, academic_year_id, class_id, subject_area) VALUES
+  ('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaa10', '10000000-0000-0000-0000-000000000001', '10000000-0000-0000-0000-000000000002', '10000000-0000-0000-0000-000000000003', 'general'),
+  ('bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbb10', '20000000-0000-0000-0000-000000000001', '20000000-0000-0000-0000-000000000002', '20000000-0000-0000-0000-000000000003', 'general');
+
+INSERT INTO public.guardian_student_links (guardian_user_id, student_id, school_id, status, verified_at) VALUES
+  ('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaa20', '10000000-0000-0000-0000-000000000011', '10000000-0000-0000-0000-000000000001', 'active', now());
+
+INSERT INTO public.feature_flag_catalog (id, key, default_enabled, description) VALUES
+  ('ffffffff-0000-0000-0000-000000000001', 'arena_beta', false, 'Flag usada pela suíte M0');

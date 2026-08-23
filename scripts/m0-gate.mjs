@@ -1,3 +1,22 @@
+/*
+ * EDUGAME — Runner do Gate M0-A com Auth real.
+ *
+ * Cria usuários de verdade em auth.users, exercita as policies pelo PostgREST
+ * com JWT de cada papel e remove os fixtures no fim.
+ *
+ * NÃO RODAR CONTRA PRODUÇÃO. Exige ALLOW_M0_GATE=true e M0_GATE_ENV em
+ * dev/staging/local. Mesmo assim, use um projeto Supabase isolado.
+ *
+ * Mudanças em relação à versão anterior:
+ *  - a negação de auditoria ao estudante era testada com o cliente
+ *    service_role, o que valida a constraint de PII mas não a negação: o item
+ *    do Gate "estudante não insere audit diretamente" ficava sem cobertura;
+ *  - o cleanup ignorava o erro de todo delete e só removia overrides por
+ *    class_id, deixando fixtures órfãos no banco de dev em silêncio;
+ *  - não havia cobertura para revogação de vínculo, escopo de override por
+ *    usuário, autorização de flag por turma nem provisionamento de perfil.
+ */
+
 import { createClient } from '@supabase/supabase-js'
 import crypto from 'node:crypto'
 
@@ -34,18 +53,25 @@ const created = {
   flagIds: [],
 }
 
+let passed = 0
+
 function assert(condition, message) {
   if (!condition) throw new Error(`ASSERTION_FAILED: ${message}`)
+  passed += 1
   console.log(`✅ ${message}`)
 }
 
-async function makeUser(label) {
+function assertDenied(result, message) {
+  assert(Boolean(result.error), message)
+}
+
+async function makeUser(label, meta = {}) {
   const email = `m0-${run}-${label}@edugame.test`
   const { data, error } = await admin.auth.admin.createUser({
     email,
     password,
     email_confirm: true,
-    user_metadata: { purpose: 'm0-gate', label },
+    user_metadata: { purpose: 'm0-gate', label, ...meta },
   })
   if (error) throw error
   createdUsers.push(data.user.id)
@@ -67,41 +93,61 @@ async function insert(table, row) {
   return data
 }
 
+async function update(table, patch, match) {
+  const { error } = await admin.from(table).update(patch).match(match)
+  if (error) throw error
+}
+
+// O cleanup anterior engolia qualquer erro. Agora cada remoção é verificada e
+// o que sobrar é reportado com o identificador, para poder ser limpo à mão.
+const cleanupProblems = []
+
+async function remove(table, column, values) {
+  if (!values || values.length === 0) return
+  const { error } = await admin.from(table).delete().in(column, values)
+  if (error) {
+    cleanupProblems.push(`${table} por ${column}: ${error.message}`)
+  }
+}
+
 async function cleanup() {
-  console.log('🧹 Limpando fixtures M0...')
-  try {
-    if (created.studentIds.length) {
-      await admin.from('guardian_student_links').delete().in('student_id', created.studentIds)
-      await admin.from('enrollments').delete().in('student_id', created.studentIds)
-    }
-    if (created.classIds.length) {
-      await admin.from('teacher_assignments').delete().in('class_id', created.classIds)
-      await admin.from('feature_flag_overrides').delete().in('class_id', created.classIds)
-    }
-    if (created.flagIds.length) {
-      await admin.from('feature_flag_catalog').delete().in('id', created.flagIds)
-    }
-    if (createdUsers.length) {
-      await admin.from('school_memberships').delete().in('user_id', createdUsers)
-    }
-    if (created.studentIds.length) {
-      await admin.from('students').delete().in('id', created.studentIds)
-    }
-    if (created.classIds.length) {
-      await admin.from('classes').delete().in('id', created.classIds)
-    }
-    if (created.yearIds.length) {
-      await admin.from('academic_years').delete().in('id', created.yearIds)
-    }
-    if (created.schoolIds.length) {
-      await admin.from('audit_logs').delete().in('school_id', created.schoolIds)
-      await admin.from('schools').delete().in('id', created.schoolIds)
-    }
-    for (const uid of createdUsers) {
-      await admin.auth.admin.deleteUser(uid)
-    }
-  } catch (e) {
-    console.error('⚠️ Falha parcial no cleanup:', e.message)
+  console.log('\n🧹 Limpando fixtures M0...')
+
+  await remove('guardian_student_links', 'student_id', created.studentIds)
+  await remove('enrollments', 'student_id', created.studentIds)
+  await remove('teacher_assignments', 'class_id', created.classIds)
+  // Por flag_id, não por class_id: overrides de escopo school/role/user não têm
+  // class_id e ficavam para trás.
+  await remove('feature_flag_overrides', 'flag_id', created.flagIds)
+  await remove('feature_flag_catalog', 'id', created.flagIds)
+  await remove('school_memberships', 'user_id', createdUsers)
+  await remove('students', 'id', created.studentIds)
+  await remove('classes', 'id', created.classIds)
+  await remove('academic_years', 'id', created.yearIds)
+  // Depois de todas as remoções acima, para varrer também o que os triggers de
+  // auditoria registraram durante a própria limpeza.
+  await remove('audit_logs', 'school_id', created.schoolIds)
+  await remove('schools', 'id', created.schoolIds)
+
+  for (const uid of createdUsers) {
+    const { error } = await admin.auth.admin.deleteUser(uid)
+    if (error) cleanupProblems.push(`auth.users ${uid}: ${error.message}`)
+  }
+
+  const { data: leftovers } = await admin
+    .from('schools')
+    .select('id')
+    .in('id', created.schoolIds.length ? created.schoolIds : [crypto.randomUUID()])
+  if (leftovers && leftovers.length > 0) {
+    cleanupProblems.push(`${leftovers.length} escola(s) de fixture ainda no banco`)
+  }
+
+  if (cleanupProblems.length > 0) {
+    console.error('⚠️  CLEANUP INCOMPLETO — remova manualmente:')
+    for (const p of cleanupProblems) console.error(`   - ${p}`)
+    process.exitCode = 1
+  } else {
+    console.log('🧼 Cleanup verificado: nenhum fixture restante.')
   }
 }
 
@@ -116,8 +162,26 @@ try {
     directorA: await makeUser('director-a'),
     teacherB: await makeUser('teacher-b'),
     tempStudent: await makeUser('temp-delete'),
+    named: await makeUser('named', { display_name: 'Nome Escolhido' }),
   }
 
+  // ---------------------------------------------------------------- identidade
+  const { data: namedProfile, error: namedProfileError } = await admin
+    .from('user_profiles')
+    .select('display_name')
+    .eq('user_id', users.named.id)
+    .maybeSingle()
+  if (namedProfileError) throw namedProfileError
+  assert(
+    namedProfile !== null,
+    'criar conta Auth provisiona user_profiles automaticamente'
+  )
+  assert(
+    namedProfile.display_name === 'Nome Escolhido',
+    'display_name do perfil vem do metadata da conta'
+  )
+
+  // ------------------------------------------------------------------- fixture
   const schoolA = await insert('schools', {
     name: `M0 Escola A ${run}`, short_name: 'M0-A', slug: `m0-a-${run}`
   })
@@ -137,10 +201,13 @@ try {
   const classA = await insert('classes', {
     school_id: schoolA.id, academic_year_id: yearA.id, name: '6º A', grade: '6º ano', code: '6A'
   })
+  const classA2 = await insert('classes', {
+    school_id: schoolA.id, academic_year_id: yearA.id, name: '7º A', grade: '7º ano', code: '7A'
+  })
   const classB = await insert('classes', {
     school_id: schoolB.id, academic_year_id: yearB.id, name: '6º A', grade: '6º ano', code: '6A'
   })
-  created.classIds.push(classA.id, classB.id)
+  created.classIds.push(classA.id, classA2.id, classB.id)
 
   const membershipRows = [
     [users.studentA, schoolA.id, 'student'],
@@ -229,6 +296,7 @@ try {
   const familyClient = await clientFor(users.familyA.email)
   const coordinatorClient = await clientFor(users.coordinatorA.email)
 
+  // ------------------------------------------------------------- RLS: leitura
   let q = await studentClient.from('students').select('id,edugame_id')
   if (q.error) throw q.error
   assert(q.data.length === 1 && q.data[0].id === studentA.id, 'student A vê apenas a si mesmo')
@@ -246,6 +314,67 @@ try {
   if (q.error) throw q.error
   assert(q.data.length === 1 && q.data[0].id === schoolA.id, 'coordenação A não vê escola B')
 
+  // ------------------------------------------------------------ RLS: escrita
+  // O item "estudante não insere audit diretamente" precisa do cliente do
+  // aluno; com service_role a inserção é legítima e o teste não prova nada.
+  assertDenied(
+    await studentClient.from('audit_logs').insert({
+      action: 'forjado_pelo_cliente', resource_type: 'system',
+    }),
+    'estudante não insere registro de auditoria'
+  )
+  assertDenied(
+    await studentClient.from('students').update({ display_name: 'hack' }).eq('id', studentA.id),
+    'estudante não altera o próprio registro escolar'
+  )
+  assertDenied(
+    await studentClient.from('school_memberships').insert({
+      user_id: users.studentA.id, school_id: schoolA.id, role: 'director',
+    }),
+    'estudante não se promove a director'
+  )
+  assertDenied(
+    await familyClient.from('students').update({ display_name: 'apelido' }).eq('id', studentA.id),
+    'responsável permanece somente leitura'
+  )
+  assertDenied(
+    await teacherClient.from('enrollments').insert({
+      student_id: studentB.id, school_id: schoolA.id,
+      academic_year_id: yearA.id, class_id: classA.id,
+    }),
+    'professor não matricula estudante pelo cliente'
+  )
+
+  const studentAudit = await studentClient.from('audit_logs').select('id')
+  if (studentAudit.error) throw studentAudit.error
+  assert(studentAudit.data.length === 0, 'estudante não lê auditoria')
+
+  // ------------------------------------------------------- revogação de acesso
+  await update('school_memberships', { status: 'suspended' },
+    { user_id: users.teacherA.id, school_id: schoolA.id })
+
+  q = await teacherClient.from('students').select('id')
+  if (q.error) throw q.error
+  assert(q.data.length === 0, 'professor com vínculo suspenso perde acesso aos estudantes')
+
+  await update('school_memberships', { status: 'active' },
+    { user_id: users.teacherA.id, school_id: schoolA.id })
+
+  q = await teacherClient.from('students').select('id')
+  if (q.error) throw q.error
+  assert(q.data.length === 2, 'reativar o vínculo devolve o acesso do professor')
+
+  await update('guardian_student_links', { status: 'revoked' },
+    { guardian_user_id: users.familyA.id, student_id: studentA.id })
+
+  q = await familyClient.from('students').select('id')
+  if (q.error) throw q.error
+  assert(q.data.length === 0, 'vínculo de responsável revogado corta o acesso')
+
+  await update('guardian_student_links', { status: 'active' },
+    { guardian_user_id: users.familyA.id, student_id: studentA.id })
+
+  // ------------------------------------------------------------ feature flags
   const flag = await insert('feature_flag_catalog', {
     key: `m0_flag_${run}`, default_enabled: false, description: 'M0 gate'
   })
@@ -263,6 +392,20 @@ try {
     })
   if (flagInsertError) throw flagInsertError
 
+  assertDenied(
+    await coordinatorClient.from('feature_flag_overrides').insert({
+      flag_id: flag.id, scope_type: 'global', enabled: true,
+    }),
+    'coordenação não cria override global'
+  )
+  assertDenied(
+    await coordinatorClient.from('feature_flag_overrides').insert({
+      flag_id: flag.id, scope_type: 'user', school_id: schoolA.id,
+      user_id: users.teacherB.id, enabled: true,
+    }),
+    'coordenação não cria override de usuário de outra escola'
+  )
+
   const rFlagA = await studentClient.rpc('get_feature_flag', {
     p_key: flag.key,
     p_school_id: schoolA.id,
@@ -270,6 +413,13 @@ try {
   })
   if (rFlagA.error) throw rFlagA.error
   assert(rFlagA.data === true, 'flag de turma está ativa para student A')
+
+  const rFlagOther = await studentClient.rpc('get_feature_flag', {
+    p_key: flag.key,
+    p_school_id: schoolA.id,
+    p_class_id: classA2.id,
+  })
+  assert(Boolean(rFlagOther.error), 'estudante não resolve flag de turma em que não está')
 
   const teacherBClient = await clientFor(users.teacherB.email)
   const rFlagB = await teacherBClient.rpc('get_feature_flag', {
@@ -280,6 +430,14 @@ try {
   if (rFlagB.error) throw rFlagB.error
   assert(rFlagB.data === false, 'flag da escola A não vaza para escola B')
 
+  const rFlagCross = await teacherBClient.rpc('get_feature_flag', {
+    p_key: flag.key,
+    p_school_id: schoolA.id,
+    p_class_id: classA.id,
+  })
+  assert(Boolean(rFlagCross.error), 'professor da escola B não resolve flag da escola A')
+
+  // ----------------------------------------------------------------- auditoria
   const { data: auditRows, error: auditError } = await admin
     .from('audit_logs')
     .select('action,metadata')
@@ -288,28 +446,63 @@ try {
   if (auditError) throw auditError
   assert(auditRows.some(x => x.action === 'feature_flag_override_created'), 'mudança de flag gera audit log')
 
-  const rawAudit = await admin.from('audit_logs').insert({
-    action: 'm0_raw_pii_should_fail',
-    resource_type: 'system',
-    metadata: { ip_address: '127.0.0.1' },
-  })
-  assert(Boolean(rawAudit.error), 'audit log rejeita chave de IP bruto no metadata')
+  const { data: membershipAudit, error: membershipAuditError } = await admin
+    .from('audit_logs')
+    .select('action')
+    .eq('resource_type', 'school_memberships')
+    .eq('school_id', schoolA.id)
+  if (membershipAuditError) throw membershipAuditError
+  assert(membershipAudit.length > 0, 'mudança de vínculo escolar gera audit log')
 
+  assertDenied(
+    await admin.from('audit_logs').insert({
+      action: 'm0_raw_pii_should_fail', resource_type: 'system',
+      metadata: { ip_address: '127.0.0.1' },
+    }),
+    'audit log rejeita chave de IP bruto no metadata'
+  )
+  assertDenied(
+    await admin.from('audit_logs').insert({
+      action: 'm0_nested_pii_should_fail', resource_type: 'system',
+      metadata: { ctx: { request: { ip_address: '127.0.0.1' } } },
+    }),
+    'audit log rejeita IP bruto aninhado no metadata'
+  )
+  assertDenied(
+    await admin.from('audit_logs').insert({
+      action: 'm0_variant_pii_should_fail', resource_type: 'system',
+      metadata: { clientIp: '127.0.0.1' },
+    }),
+    'audit log rejeita variação de nome de chave de IP'
+  )
+
+  // -------------------------------------------------------- exclusão de conta
   const deleteResult = await admin.auth.admin.deleteUser(users.tempStudent.id)
   if (deleteResult.error) throw deleteResult.error
+  // O usuário já foi removido; evita tentativa duplicada no cleanup.
+  const ix = createdUsers.indexOf(users.tempStudent.id)
+  if (ix >= 0) createdUsers.splice(ix, 1)
+
   const { data: tempAfter, error: tempAfterError } = await admin
     .from('students')
     .select('id,user_id,edugame_id')
     .eq('id', tempStudent.id)
     .single()
   if (tempAfterError) throw tempAfterError
-  assert(tempAfter.id === tempStudent.id && tempAfter.user_id === null, 'apagar Auth preserva estudante e zera user_id')
+  assert(
+    tempAfter.id === tempStudent.id && tempAfter.user_id === null,
+    'apagar Auth preserva estudante e zera user_id'
+  )
 
-  // O usuário temp já foi removido; evita tentativa de remoção duplicada no cleanup.
-  const ix = createdUsers.indexOf(users.tempStudent.id)
-  if (ix >= 0) createdUsers.splice(ix, 1)
+  const { data: tempProfile, error: tempProfileError } = await admin
+    .from('user_profiles')
+    .select('user_id')
+    .eq('user_id', users.tempStudent.id)
+    .maybeSingle()
+  if (tempProfileError) throw tempProfileError
+  assert(tempProfile === null, 'apagar Auth remove o perfil (PII de autenticação)')
 
-  console.log('\n🎉 M0 GATE AUTOMATION: PASSOU')
+  console.log(`\n🎉 M0 GATE AUTOMATION: PASSOU (${passed} asserções)`)
 } catch (error) {
   console.error('\n❌ M0 GATE AUTOMATION: FALHOU')
   console.error(error)
